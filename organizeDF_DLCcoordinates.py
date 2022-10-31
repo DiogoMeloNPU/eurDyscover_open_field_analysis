@@ -17,11 +17,4 @@ def organizeDLCinfo(path_predictions_DLC):
     for column in df_DLC.columns:
         df_DLC[column] = pd.to_numeric(df_DLC[column])
 
-    DLC_predictions_ready = False    
-    if len(df_DLC) == len(df_framediff)+1 == total_frames:
-        print('The dataframe with DLC predictions is ready. The dimensions of this df match the total number of frames in the video :)')
-        DLC_predictions_ready = True
-    else:
-        print('The DLC predictions don\'t match the Frame diff')
-
     return df_DLC #dataframe with the DLC predictions

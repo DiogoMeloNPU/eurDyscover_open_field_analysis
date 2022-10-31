@@ -1,7 +1,10 @@
 #please note that this code is not resusable for other excel files, this works without alterations specifically for 
 # 'Mice list_Dystonia_WORKING_230922.xlsx' (14-10-2022)
+from os import walk
 import pandas as pd
 import numpy as np
+import os
+import organizeDF_DLCcoordinates
 
 dystoniaMiceInfoPath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Mice list_Dystonia_WORKING_230922.xlsx"
 dystoniaMiceInfoDF = pd.read_excel(dystoniaMiceInfoPath)
@@ -41,13 +44,41 @@ files_available = ['neuron.mat', 'Simpler_neuron.mat', 'AccelData.csv', 'DLC_coo
 for file_type in files_available:
     dystoniaFilesDF[file_type] = np.nan
 
-#show dystoniaFilesDF dataframe
+#add a new column containing the session time info (BL1, W09,...)
+sessionInfo = np.array(session*dystoniaMiceInfoDF.shape[0]) #create the values for the new column
+dystoniaFilesDF['Session'] = sessionInfo
+
+#separate the 'Gene' column info in two columns: 'Genotype' - DYT1 or WT; 'CRE' - D1 or D2
+gene = np.array(dystoniaFilesDF['Gene'])
+gene = [session.replace(' ', '') for session in gene]
+genotype = [session.split('/')[0] for session in gene]
+cre = [session.split('/')[1][:-3] for session in gene]
+dystoniaFilesDF['Genotype'] = genotype
+dystoniaFilesDF['CRE'] = cre
+dystoniaFilesDF.drop(columns = ['Gene'], inplace=True)
 print(dystoniaFilesDF)
-print(dystoniaFilesDF.columns)
 
-#use the following path to produce a file list
-parentFolder = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS"
+#Now, the structure is ready to be filled with the paths of every available file
 
+#starting with the DLC coordinates, which are stored in a separate Google Drive Folder named 'DLC_data_movie_processed'...
+parentFolderDLC = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\DLC_data_movie_processed"
+
+'''#use the following path to produce a file list
+parentFolderOtherFiles = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS"
+# list to store files name
+allFiles = []
+for (parentFolder, dir_names, file_names) in walk(parentFolder):
+    allFiles.extend(file_names)
+print(allFiles)'''
+
+#all the other files are organized in the same session folder...
 #use the lower level subfolder name to search for specific files using a file pattern
 
-#rearrange the dataframe for multiindexing access
+#finally, rearrange the dataframe for multiindexing access
+
+#save the dataframe as a csv file in google drive
+#while the df is nogt finished, just save it to the Desktop to check if is is being created correctly
+#DesktopPath = "C:\\Users\\user\\Desktop\\DystoniaDataBase.csv"
+#dystoniaFilesDF.to_csv(DesktopPath)
+
+#form here on, this file should not be changed. If you want to improve this file, please performe those changes on a copy (this version is suposed to work only as a database for the file paths for easier and structured access to what is needed for a specific analysis which should be implemented in a separate .py module as well)

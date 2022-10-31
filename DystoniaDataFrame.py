@@ -25,11 +25,11 @@ dystoniaMiceInfoDF = pd.concat([D1dystoniaMiceInfoDF, D2dystoniaMiceInfoDF], ign
 dystoniaMiceInfoDF = dystoniaMiceInfoDF.iloc[1: , :] #drop the first row
 dystoniaMiceInfoDF.reset_index(inplace=True)  # reset index
 dystoniaMiceInfoDF = dystoniaMiceInfoDF.iloc[:, 1:] #eliminate first column (incorrect indices)
-dystoniaMiceInfoDF = dystoniaMiceInfoDF.rename_axis('', axis = 'columns') #remove the '1' that was 'labeling' the df indices
+dystoniaMiceInfoDF = dystoniaMiceInfoDF.rename_axis('Index', axis = 'columns') #remove the '1' that was 'labeling' the df indices
 
 #dystoniaFilesDF contains detailed information on all mice used
 #it is necessary to create a new df in which each row of dystoniaMiceIndoDF is replicated as much times as the number of sessions
-session = ['BL1', 'BL2', 'W01', 'W03', 'W06', 'W09']
+session = ['BL1', 'BL2', 'W1', 'W3', 'W6', 'W9']
 dystoniaFilesDF = pd.DataFrame(np.repeat(dystoniaMiceInfoDF.values, len(session), axis=0))
 dystoniaFilesDF.columns = dystoniaMiceInfoDF.columns
 
@@ -56,12 +56,36 @@ cre = [session.split('/')[1][:-3] for session in gene]
 dystoniaFilesDF['Genotype'] = genotype
 dystoniaFilesDF['CRE'] = cre
 dystoniaFilesDF.drop(columns = ['Gene'], inplace=True)
-print(dystoniaFilesDF)
+
+#temporarily add a new column to dystoniaFilesDF containing only the ID number
+NumberID = np.array(dystoniaFilesDF['ID'])
+NumberID = [str(numberID)[-5:]
+            for numberID in NumberID]  # check for the '-0122' mice
+dystoniaFilesDF['NumberID'] = NumberID
 
 #Now, the structure is ready to be filled with the paths of every available file
-
 #starting with the DLC coordinates, which are stored in a separate Google Drive Folder named 'DLC_data_movie_processed'...
 parentFolderDLC = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\DLC_data_movie_processed"
+
+#filterDystoniaFilesDF = dystoniaFilesDF[(currentSession[0] in dystoniaFilesDF['ID']) & (dystoniaFilesDF['Session'] == currentSession[1])]
+for path, subdirs, files in os.walk(parentFolderDLC):
+    for name in files:
+        if name.endswith('.csv'):
+            # list containing the session (0), the mice id (1) and the path for the DLC coordinates .csv file (2)
+            currentSession = [str(path).split('\\')[-2], str(path).split('\\')[-1][1:], os.path.join(path, name)]
+            #if, in a specific row, there is a match for 'NumberID' (currentSession[0]) and 'Session' (currentSession[1]), 
+            #then the path of the DLC file (currentSession[2]) should be added in that row in the cell from column 'DLC_coordinate_predictions.csv'
+            match = dystoniaFilesDF.loc[(dystoniaFilesDF['Session'] == currentSession[0]) & (
+                dystoniaFilesDF['NumberID'] == currentSession[1])]
+            if len(match) == 1:
+                dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentSession[2]
+                print('The following file path was added to the "DLC_coordinate_predictions": {}'.format(currentSession[2]))
+
+#show df
+print(dystoniaFilesDF)
+
+#all the other files are organized in the same session folder...
+#use the lower level subfolder name to search for specific files using a file pattern
 
 '''#use the following path to produce a file list
 parentFolderOtherFiles = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS"
@@ -70,9 +94,6 @@ allFiles = []
 for (parentFolder, dir_names, file_names) in walk(parentFolder):
     allFiles.extend(file_names)
 print(allFiles)'''
-
-#all the other files are organized in the same session folder...
-#use the lower level subfolder name to search for specific files using a file pattern
 
 #finally, rearrange the dataframe for multiindexing access
 

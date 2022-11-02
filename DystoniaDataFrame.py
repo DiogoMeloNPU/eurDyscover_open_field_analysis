@@ -4,7 +4,6 @@ from os import walk
 import pandas as pd
 import numpy as np
 import os
-import organizeDF_DLCcoordinates
 
 dystoniaMiceInfoPath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Mice list_Dystonia_WORKING_230922.xlsx"
 dystoniaMiceInfoDF = pd.read_excel(dystoniaMiceInfoPath)
@@ -79,27 +78,74 @@ for path, subdirs, files in os.walk(parentFolderDLC):
                 dystoniaFilesDF['NumberID'] == currentSession[1])]
             if len(match) == 1:
                 dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentSession[2]
-                print('The following file path was added to the "DLC_coordinate_predictions": {}'.format(currentSession[2]))
+                print('The following file path was added to the "DLC_coordinate_predictions" column: {}\n'.format(currentSession[2]))
 
 #show df
 print(dystoniaFilesDF)
 
 #all the other files are organized in the same session folder...
-#use the lower level subfolder name to search for specific files using a file pattern
+#use the name of lower level subfolders to search for specific files using a file pattern
 
-'''#use the following path to produce a file list
-parentFolderOtherFiles = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS"
-# list to store files name
-allFiles = []
-for (parentFolder, dir_names, file_names) in walk(parentFolder):
-    allFiles.extend(file_names)
-print(allFiles)'''
+#use the following path to produce a file list
+parentFolderOtherFiles_D1 = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1"
+parentFolderOtherFiles_D2 = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D2"
+parentFoldersOtherFiles = np.array([parentFolderOtherFiles_D1, parentFolderOtherFiles_D2])
+
+def build_proper_session_name(str_file_path):
+    proper_session_name = (str(str_file_path).split('\\')[6])
+    if proper_session_name == 'Baseline 1':
+        proper_session_name = 'BL1'
+    elif proper_session_name == 'Baseline 2':
+        proper_session_name = 'BL2'
+    return proper_session_name
+
+
+for parent in parentFoldersOtherFiles:
+    for path, subdirs, files in os.walk(parent):
+        for name in files:
+            #set the name to lower case characters
+            name = name.lower()
+            length_path = len(str(path).split('\\'))
+            if length_path == 8: #meaning you are in a lowest level subfolder
+                current_number_id = str(path).split('\\')[-1][:5]
+                current_session = build_proper_session_name(path)
+                current_file_path = os.path.join(path, name)
+                currentFile = [current_number_id, current_session, current_file_path]
+                #print(currentFile); print('\n')
+                match = dystoniaFilesDF.loc[(dystoniaFilesDF['NumberID'] == currentFile[0]) & (dystoniaFilesDF['Session'] == currentFile[1])]
+                if len(match) == 1:
+                    #define if elif conditional statements to search for files of interest and assigned the respective path to the dataframe
+                    #nested if else for neuron.mat and simpler_neuron.mat
+                    if name.endswith('.mat'):
+                        if 'simpler' in name: #simpler_neuron.mat
+                            dystoniaFilesDF['Simpler_neuron.mat'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "simpler_neuron.mat" column: {}\n'.format(currentFile[2]))
+                        else: #neuron.mat
+                            dystoniaFilesDF['neuron.mat'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "neuron.mat" column: {}\n'.format(currentFile[2]))
+                    # nested if else for AccelData.csv and FrameDiff.csv
+                    elif name.endswith('.csv'):
+                        if 'acceldata' in name: #acceldata.csv
+                            dystoniaFilesDF['AccelData.csv'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "AccelData.csv" column: {}\n'.format(currentFile[2]))
+                        elif 'framediff' in name: #frameDiff.csv
+                            dystoniaFilesDF['FrameDiff.csv'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "FrameDiff.csv" column: {}\n'.format(currentFile[2]))
+                    elif name.endswith('.avi'): #videoProcessed.avi
+                        if 'processed' in name:
+                            dystoniaFilesDF['VideoProcessed.avi'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "VideoProcessed.avi" column: {}\n'.format(currentFile[2]))
+
+print(dystoniaFilesDF)
 
 #finally, rearrange the dataframe for multiindexing access
 
 #save the dataframe as a csv file in google drive
-#while the df is nogt finished, just save it to the Desktop to check if is is being created correctly
+path2saveDF = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\"
+dystoniaFilesDF.to_csv(path2saveDF)
+
+#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
 #DesktopPath = "C:\\Users\\user\\Desktop\\DystoniaDataBase.csv"
 #dystoniaFilesDF.to_csv(DesktopPath)
 
-#form here on, this file should not be changed. If you want to improve this file, please performe those changes on a copy (this version is suposed to work only as a database for the file paths for easier and structured access to what is needed for a specific analysis which should be implemented in a separate .py module as well)
+#form here on, this file should not be changed. If you want to improve this file, please perform those changes on a copy (this version is suposed to work only as a database for the file paths for easier and structured access to what is needed for a specific analysis,  which should be implemented in a separate .py module as well)

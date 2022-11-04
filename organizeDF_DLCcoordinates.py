@@ -35,11 +35,34 @@ dystoniaFilesDF = pd.read_csv(dystoniaFilesDFpath)
 for DLCpredictionFile in dystoniaFilesDF['DLC_coordinate_prediction.csv']:
     print(type(DLCpredictionFile))
 
+#create an array to save the paths of the new OrganizedDLC files
+OrganizedDLCpaths = []
+#create a file pattern to name the new files
+file_pattern = 'OrganizedDLC_'
 #create a new file with an organized dataframe of DLC predictions for all prediction files
-for DLCpredictionFile in dystoniaFilesDF['DLC_coordinate_prediction.csv']:
+for row, DLCpredictionFile in enumerate(dystoniaFilesDF['DLC_coordinate_prediction.csv']):
     if not isinstance(DLCpredictionFile, float):
-        print('----Organize the following file and display the new dataframe----: {}\n'.format(DLCpredictionFile))
-        #organized_DLC_predictionsDF = organizeDLCinfo(DLCpredictionFile)
+        print('\n\n----Organize the following file and display the new dataframe----: {}'.format(DLCpredictionFile))
+        organized_DLC_predictionsDF = organizeDLCinfo(DLCpredictionFile)
         print(organized_DLC_predictionsDF)
-        path2save_organizedDLC_DF = #same path as the other files, not the path of the original DLC file (which was in a separate folder)
-        path2save_organizedDLC_DF.to_csv(path2save_organizedDLC_DF)
+        #create the path of the new file
+        temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
+        temp_path.append(file_pattern+DLCpredictionFile.split('\\')[-1]) 
+        #same path as the other files, not the path of the original DLC file (which was in a separate folder)
+        path2save_organizedDLC_DF = '\\'.join(temp_path)
+        print('A new file was created in the following folder: {}'.format(path2save_organizedDLC_DF))
+        organized_DLC_predictionsDF.to_csv(path2save_organizedDLC_DF)
+        OrganizedDLCpaths.append(DLCpredictionFile)
+    else:
+        OrganizedDLCpaths.append(np.nan)
+        
+#create a new column in dystoniaFileDF to save the path of the new file
+dystoniaFilesDF['OrganizedDLC_coordinate_predictions.csv'] = OrganizedDLCpaths
+
+#show the df
+print(dystoniaFilesDF)
+
+#save the dataframe as a csv file in google drive - this will overwrite the fist dystoniaFilesDF.csv
+path2saveDF = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.csv"
+dystoniaFilesDF.to_csv(path2saveDF)
+print('\n\nThe dystoniaFileDF.csv file was updated.')

@@ -31,10 +31,6 @@ def organizeDLCinfo(path_predictions_DLC):
 dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.csv"
 dystoniaFilesDF = pd.read_csv(dystoniaFilesDFpath)
 
-#delete
-for DLCpredictionFile in dystoniaFilesDF['DLC_coordinate_prediction.csv']:
-    print(type(DLCpredictionFile))
-
 #create an array to save the paths of the new OrganizedDLC files
 OrganizedDLCpaths = []
 #create a file pattern to name the new files

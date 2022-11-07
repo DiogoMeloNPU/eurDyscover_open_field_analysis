@@ -141,7 +141,7 @@ print(dystoniaFilesDF)
 #finally, rearrange the dataframe for multiindexing access
 
 #save the dataframe as a csv file in google drive
-path2saveDF = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\"
+path2saveDF = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.csv"
 dystoniaFilesDF.to_csv(path2saveDF)
 
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly

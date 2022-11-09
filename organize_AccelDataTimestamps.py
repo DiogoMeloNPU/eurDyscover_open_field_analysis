@@ -107,7 +107,7 @@ def get_camera_timestamps(path):
     return camera_timestamps, first_TTL, last_TTL
 
 
-def get_accelerometer_timestamp(path):
+def get_accelerometer_timestamps(path):
     '''
     This function obtains the timestamps of the accelerometer, as well as information regarding which TTLs belong to the session.
     For that, it recieves as input the path of an AccelData.csv file.

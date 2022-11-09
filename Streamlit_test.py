@@ -8,3 +8,5 @@ dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48l
 df=pd.read_csv(dystoniaFilesDFpath)
 
 stl.table(df)
+
+#test this out after pip install streamlit

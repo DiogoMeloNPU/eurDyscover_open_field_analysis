@@ -1,11 +1,14 @@
 #this module organizes every file containing the DLC predictions for easier manipulation of the data as a pandas dataframe
 #it also stores each new file in the respective folder containing all other files (neuron.mat, simpler_neuron.mat, AccelData.csv,
 # FrameDiff.csv, VideoProcessed.csv)
+#finally is updates the dystoniaFilesDF.csv with a new column with the paths for the files created here
 
 from os import walk
 import pandas as pd
 import numpy as np
 import os
+#import the module necessary for obtaining the camera timestamps
+import organize_AccelDataTimestamps
 
 def organizeDLCinfo(path_predictions_DLC):
     '''

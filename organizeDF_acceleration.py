@@ -3,8 +3,15 @@
 # FrameDiff.csv, VideoProcessed.csv)
 #finally is updates the dystoniaFilesDF.csv with a new column with the paths for the files created here
 
+from os import walk
+import pandas as pd
+import numpy as np
+import os
+#import the module necessary for obtaining the acceleration timestamps
+import organize_AccelDataTimestamps
+
 #create a function that calculates the vector magnitude (total body acceleration from the x, y and z components)
-def calculate_totalBodyAcceleration(createAccelDataDF(path_acceldata)):
+def calculate_totalBodyAcceleration(path):
     '''
     This function calculates the vector magnitude or total body acceleration using the AccelData dataframe.
     It also produces a dataframe containing only the accelerometer information (total body acceleration and timestamps)
@@ -60,8 +67,12 @@ def calculate_totalBodyAcceleration(createAccelDataDF(path_acceldata)):
     # euclidian norm/vector magnitude
     total_bodyaccel = np.sqrt(x_BA**2+y_BA**2+z_BA**2)
 
-    df_acceldata_accel['Total_accel'] = total_bodyaccel
-    df_acceldata_accel = df_acceldata_accel[['Command', 'RegisterAddress', 'Timestamp',
+    return total_bodyaccel
+
+def buildAccelDF(total_body_acceleration):
+    df_acceleration = pd.DataFrame()
+    df_acceleration['Total_accel'] = total_body_acceleration
+    df_acceleration = df_acceleration[['Command', 'RegisterAddress', 'Timestamp',
                                             'DataElement0', 'Accel_y', 'Accel_z',
                                              'Gyr_x', 'Gyr_y', 'Gyr_z',
                                              'Magn_x', 'Magn_y', 'Magn_z',
@@ -69,4 +80,11 @@ def calculate_totalBodyAcceleration(createAccelDataDF(path_acceldata)):
                                              'Total_accel']]
 
     df_acceldata_accel.reset_index(inplace=True, drop=True)
-    df_acceldata_accel
+    
+    #show the dataframe
+    print(df_acceleration)
+
+    return df_acceleration
+
+#needs to import the timestamps from the organize_AccelDataTimestamps.py module
+#get_accelerometer_timestamps(path) this must be inside one of the functions

@@ -7,20 +7,21 @@ from os import walk
 import pandas as pd
 import numpy as np
 import os
+from scipy import signal
+import math
 #import the module necessary for obtaining the acceleration timestamps
-import organize_AccelDataTimestamps
+from organize_AccelDataTimestamps import open_AccelData_asDF, get_accelerometer_timestamps
 
 #create a function that calculates the vector magnitude (total body acceleration from the x, y and z components)
 def calculate_totalBodyAcceleration(path):
     '''
     This function calculates the vector magnitude or total body acceleration using the AccelData dataframe.
-    It also produces a dataframe containing only the accelerometer information (total body acceleration and timestamps)
     '''
+    df_acceldata_accel = open_AccelData_asDF(path)
     # create a dataframe with the accel data exclusively (command=3 and register address = 34)
-    df_acceldata_accel = df_acceldata.loc[df_acceldata['Command']
-                                          == 3].loc[df_acceldata['RegisterAddress'] == 34]
+    df_acceldata_accel = df_acceldata_accel.loc[df_acceldata_accel['Command']
+                                          == 3].loc[df_acceldata_accel['RegisterAddress'] == 34]
 
-    # based on the matlab code Marcelo sent me
     fs = 200  # sampling frequency
     f_cut = 1/(fs/2)
 
@@ -69,22 +70,52 @@ def calculate_totalBodyAcceleration(path):
 
     return total_bodyaccel
 
-def buildAccelDF(total_body_acceleration):
+def buildAccelDF(acceldata_path):
+    '''
+    This function gets the values of the total body acceleration and respective timestamps 
+    from other functions and organizes them in a dataframe.
+    '''
+    #create the dataframe
     df_acceleration = pd.DataFrame()
-    df_acceleration['Total_accel'] = total_body_acceleration
-    df_acceleration = df_acceleration[['Command', 'RegisterAddress', 'Timestamp',
-                                            'DataElement0', 'Accel_y', 'Accel_z',
-                                             'Gyr_x', 'Gyr_y', 'Gyr_z',
-                                             'Magn_x', 'Magn_y', 'Magn_z',
-                                             'Counter',
-                                             'Total_accel']]
 
-    df_acceldata_accel.reset_index(inplace=True, drop=True)
+    #save the total body acceleration in a variable and create a column in the datraframe with those values
+    total_body_acceleration = calculate_totalBodyAcceleration(acceldata_path)
+    df_acceleration['Total_accel'] = total_body_acceleration
     
-    #show the dataframe
-    print(df_acceleration)
+    #not sure if this is necessary - delete
+    df_acceleration.reset_index(inplace=True, drop=True)  
+
+    #save the timestamps, the first and last TTLs in separate variables
+    timestamps, first_TTL, last_TTL = get_accelerometer_timestamps(acceldata_path)
+
+    #add the timestamps as a new df column
+    df_acceleration['Timestamp'] = timestamps
 
     return df_acceleration
 
-#needs to import the timestamps from the organize_AccelDataTimestamps.py module
-#get_accelerometer_timestamps(path) this must be inside one of the functions
+#open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
+dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.csv"
+dystoniaFilesDF = pd.read_csv(dystoniaFilesDFpath)
+
+#create an array to save the paths of the new TotalBAccel.pkl files
+TotalBAccelpaths = []
+#creat a file pattern to name the new files
+file_pattern = 'TotalBAccel_'
+#create a new pkl file with a dataframe containing the total body acceleration and respective timestamps
+for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
+    if not isinstance(AccelDataFile, float):
+        #print('\n\n----Organize the following file and display the new dataframe----: {}'.format(AccelDataFile))
+        #organized_AccelDF = buildAccelDF(AccelDataFile)
+        #print(organized_AccelDF)
+        #create the path of the new file
+        temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
+        file_type = "pkl"
+        temp_path.append(file_pattern+AccelDataFile.split('\\')[-1][:-3]+file_type)
+        path2save_organized_AccelDF = '\\'.join(temp_path)
+        print(path2save_organized_AccelDF)
+        #print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
+        #organized_AccelDF.to_pikel(path2save_organized_AccelDF)
+        #TotalBAccelpaths.append(AccelDataFile)
+
+#now it is necessary to create a dataframe for each of the acceleration files available and store them in Google Drive
+#save the dataframe as pkl

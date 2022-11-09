@@ -20,9 +20,6 @@ USEFUL INFORMATION:
 -A session is defined as the data from the first to the last inscopix! (everything from the first to the last 35, inclusively). This is the period during which the camera, the microscope and the accelerometer are simlutaneously recording. 
 '''
 
-#delete after checking if it is working properly in the command line
-path_acceldata = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\AccelData2021-04-28T13_45_51.6713216+01_00.csv"
-
 def convert(val):
     try:
         return float(val)

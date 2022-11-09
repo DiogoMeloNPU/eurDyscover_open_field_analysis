@@ -115,7 +115,7 @@ def get_accelerometer_timestamps(path):
     To obtain the first and last accelerometer timestamps of the session it is necessary to obtain the first and last...
     ...inscopix timestamps and perform an index search which accelerometer_timestamps are in between these indices.
     '''
-    timestamps_df = open_AccelData_asDF(path_acceldata)
+    timestamps_df = open_AccelData_asDF(path)
 
     accelerometer_timestamps = timestamps_df['Timestamp'].loc[timestamps_df['Command']
                                                        == 3].loc[timestamps_df['RegisterAddress'] == 34]

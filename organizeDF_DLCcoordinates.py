@@ -51,7 +51,7 @@ for row, DLCpredictionFile in enumerate(dystoniaFilesDF['DLC_coordinate_predicti
         path2save_organizedDLC_DF = '\\'.join(temp_path)
         print('A new file was created in the following folder: {}'.format(path2save_organizedDLC_DF))
         organized_DLC_predictionsDF.to_csv(path2save_organizedDLC_DF)
-        OrganizedDLCpaths.append(DLCpredictionFile)
+        OrganizedDLCpaths.append(path2save_organizedDLC_DF)
     else:
         OrganizedDLCpaths.append(np.nan)
         
@@ -61,6 +61,7 @@ dystoniaFilesDF['OrganizedDLC_coordinate_predictions.csv'] = OrganizedDLCpaths
 #show the df
 print(dystoniaFilesDF)
 
+#I already had the filepath
 #save the dataframe as a csv file in google drive - this will overwrite the fist dystoniaFilesDF.csv
 path2saveDF = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.csv"
 dystoniaFilesDF.to_csv(path2saveDF)

@@ -93,9 +93,11 @@ def buildAccelDF(acceldata_path):
 
     return df_acceleration
 
-#open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.csv"
-dystoniaFilesDF = pd.read_csv(dystoniaFilesDFpath)
+#open the dystoniaFilesDF.pkl that was created in DystoniaDataFrame.py
+dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+
+#now it is necessary to create a dataframe for each of the acceleration files available and store them in Google Drive
 
 #create an array to save the paths of the new TotalBAccel.pkl files
 TotalBAccelpaths = []
@@ -104,18 +106,28 @@ file_pattern = 'TotalBAccel_'
 #create a new pkl file with a dataframe containing the total body acceleration and respective timestamps
 for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
     if not isinstance(AccelDataFile, float):
-        #print('\n\n----Organize the following file and display the new dataframe----: {}'.format(AccelDataFile))
-        #organized_AccelDF = buildAccelDF(AccelDataFile)
-        #print(organized_AccelDF)
+        print('\n\n----Organize the following file and display the new dataframe----: {}'.format(AccelDataFile))
+        organized_AccelDF = buildAccelDF(AccelDataFile)
+        print(organized_AccelDF)
         #create the path of the new file
         temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
         file_type = "pkl"
         temp_path.append(file_pattern+AccelDataFile.split('\\')[-1][:-3]+file_type)
         path2save_organized_AccelDF = '\\'.join(temp_path)
         print(path2save_organized_AccelDF)
-        #print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
-        #organized_AccelDF.to_pikel(path2save_organized_AccelDF)
-        #TotalBAccelpaths.append(AccelDataFile)
+        print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
+        organized_AccelDF.to_pickle(path2save_organized_AccelDF)
+        TotalBAccelpaths.append(AccelDataFile)
+    else:
+        TotalBAccelpaths.append(np.nan)
 
-#now it is necessary to create a dataframe for each of the acceleration files available and store them in Google Drive
-#save the dataframe as pkl
+#create a new column in dystoniaFilesDF to save the path of the new file
+dystoniaFilesDF['TotalBodyAccel'] = TotalBAccelpaths
+
+#show the df
+print(dystoniaFilesDF)
+
+#save the dataframe as pkl file in google drive -  this will overwrite (update) the fist dystoniaFilesDF.csv
+path2saveDF = dystoniaFilesDFpath
+dystoniaFilesDF.to_pickle(path2saveDF)
+print('\n\nThe dystoniaFileDF.pkl file was updated.')

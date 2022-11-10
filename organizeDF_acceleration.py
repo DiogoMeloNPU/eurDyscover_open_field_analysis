@@ -117,7 +117,7 @@ for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
         print(path2save_organized_AccelDF)
         print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
         organized_AccelDF.to_pickle(path2save_organized_AccelDF)
-        TotalBAccelpaths.append(AccelDataFile)
+        TotalBAccelpaths.append(path2save_organized_AccelDF)
     else:
         TotalBAccelpaths.append(np.nan)
 

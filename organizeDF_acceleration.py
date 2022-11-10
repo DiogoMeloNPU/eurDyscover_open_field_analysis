@@ -122,7 +122,7 @@ for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
         TotalBAccelpaths.append(np.nan)
 
 #create a new column in dystoniaFilesDF to save the path of the new file
-dystoniaFilesDF['TotalBodyAccel'] = TotalBAccelpaths
+dystoniaFilesDF['TotalBodyAccel.pkl'] = TotalBAccelpaths
 
 #show the df
 print(dystoniaFilesDF)

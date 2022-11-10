@@ -125,7 +125,7 @@ for parent in parentFoldersOtherFiles:
                             print('The following file path was added to the "neuron.mat" column: {}\n'.format(currentFile[2]))
                     # nested if else for AccelData.csv and FrameDiff.csv
                     elif name.endswith('.csv'):
-                        if 'acceldata' in name: #acceldata.csv
+                        if 'acceldata' in name and 'metadata' not in name: #acceldata.csv
                             dystoniaFilesDF['AccelData.csv'][match.index[0]] = currentFile[2]
                             print('The following file path was added to the "AccelData.csv" column: {}\n'.format(currentFile[2]))
                         elif 'framediff' in name: #frameDiff.csv

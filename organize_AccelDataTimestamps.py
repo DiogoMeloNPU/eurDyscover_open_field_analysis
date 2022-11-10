@@ -79,7 +79,7 @@ def get_camera_timestamps(path):
     To obtain the first and last camera timestamps of the session it is necessary to obtain the first and last...
     ...inscopix timestamps and perform an index search which camera_timestamps are in between these indices.
     '''
-    timestamps_df = open_AccelData_asDF(path_acceldata)
+    timestamps_df = open_AccelData_asDF(path)
 
     camera_timestamps = timestamps_df['Timestamp'].loc[timestamps_df['Command']==3].loc[timestamps_df['RegisterAddress']==37]
     camera_timestamps = pd.DataFrame(camera_timestamps)

@@ -114,7 +114,6 @@ for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
         file_type = "pkl"
         temp_path.append(file_pattern+AccelDataFile.split('\\')[-1][:-3]+file_type)
         path2save_organized_AccelDF = '\\'.join(temp_path)
-        print(path2save_organized_AccelDF)
         print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
         organized_AccelDF.to_pickle(path2save_organized_AccelDF)
         TotalBAccelpaths.append(path2save_organized_AccelDF)
@@ -127,7 +126,7 @@ dystoniaFilesDF['TotalBodyAccel.pkl'] = TotalBAccelpaths
 #show the df
 print(dystoniaFilesDF)
 
-#save the dataframe as pkl file in google drive -  this will overwrite (update) the fist dystoniaFilesDF.csv
+#save the dataframe as pkl file in google drive -  this will overwrite (update) the first dystoniaFilesDF.csv
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_pickle(path2saveDF)
 print('\n\nThe dystoniaFileDF.pkl file was updated.')

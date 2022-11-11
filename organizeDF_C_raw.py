@@ -1,58 +1,104 @@
-#this module creates a dataframe with the C_raw data
+#this module creates a dataframe with the C_raw data, as well as the Inscopix timestamps
+#It also saves the mentioned dfs as pkl and stores them in the respective google drive folder
+#finally, it updates the dystoniaFilesDF.csv with a new column with the paths for the files created here
 
-# Using matlab function Sources2D_to_simple_mat, I obtain the data.mat file
+import matplotlib.pyplot as plt
 import numpy as np
 from os.path import dirname, join as pjoin
 import scipy.io as sio
 import pandas as pd
 #import the module necessary for obtaining the Inscopix timestamps
-import organize_AccelDataTimestamps
+from organize_AccelDataTimestamps import open_AccelData_asDF, get_microscope_timestamps
 
+#create a function that builds the dataframe given the path a 'Simpler_neuron.mat' and 'AccelData.csv' files
+def buildCrawDF(path_SimplerNeuron, path_acceldata):
+    '''
+    This function creates a dataframe with the C_raw values of each neuron (single session).
+    It also creates a column with the inscopix timestamps.            
+    '''
+    #this varible contains the information of the simpler_neuron.mat file python dictionary
+    neuron_mat_info = sio.loadmat(path_SimplerNeuron)
 
-'''# Convert A from sparse matrix to numpy array. Reshape A to be size [n_neurons, image_y_dim, image_x_dim]
-A = neuron_mat_info['A'].toarray().reshape(
-    [*np.flip(neuron_mat_info['image_size'][0]), -1]).transpose()
-# Convert S from sparse matrix to numpy array.
-S = neuron_mat_info['S'].toarray()
-#save processed calcium traces in separate array
-C = neuron_mat_info['C']
-#save raw calcium traces in a separate array
-C_raw = neuron_mat_info['C_raw']'''
-
-
-simplerNeuronPath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\simpler_26-Jul_17_58_11.mat"v
-
-acceldata_path = ...
-#add a new column containing the timestamps (import from organize_AccelDataTimestamps)
-get_microscope_timestamps(acceldata_path)
-
-#create a new column in dystoniaFilesDF to save the path of the new file
-
-#show the dataframe
-
-def buildCrawDF(path, C_raw):
-    #this test varible contains the information of the data.mat file python dictionary
-    neuron_mat_info = sio.loadmat(simplerNeuronPath)
-
-    #save raw calcium traces in a separate array
+    #save raw calcium signal in a separate array
     C_raw = neuron_mat_info['C_raw']
 
+    #create a dataframe with the C_raw data
+    df_C_raw = pd.DataFrame(C_raw)
+    df_C_raw = df_C_raw.T  # transpose the calcium data
 
-    #create the dataframes with the C_raw data, as well as the timestamps
-    df_calcium = pd.DataFrame(C_raw)
-    df_calcium = df_calcium.T  # transpose the calcium data
-
-    #generate a label for each neuron of the dataframe (e.g.: neuron_1)
+    #generate a label for each neuron of the dataframe (e.g.: neuron_1, neuron_2, ...)
     neuron_labels = []
     for neuron in range(1, C_raw.shape[0]+1):
         neuron_label = 'neuron_'+str(neuron)
         neuron_labels.append(neuron_label)
     #change the labels on the dataframe
-    df_calcium.columns = neuron_labels
+    df_C_raw.columns = neuron_labels
 
-    #show the dataframe
-    print(df_calcium)
+    #delete
+    print(df_C_raw)
 
-    return df_calcium
+    #save the timestamps in a variable
+    timestamps = get_microscope_timestamps(path_acceldata)
 
-#save the dataframe as a csv in google drive - 
+    #add a new column with the inscopix timestamps (keep in mind that you should only consider one in each two inscopix timestamps)
+    #df_C_raw['Timestamp'] = timestamps[::2]
+
+    #delete - plot the timestamp diffs and check for missing data
+    print(np.diff(timestamps[0:10:2]))
+    print(timestamps)
+    print(len(df_C_raw), len(timestamps[2:])/2, len(np.diff(timestamps[0::2])))
+
+    return df_C_raw
+
+'''
+plt.subplot(1,2,1)
+plt.plot(range(len(timestamps[0::2])), timestamps[0::2])
+plt.subplot(1,2,2)
+plt.plot(range(len(timestamps[2::2])), timestamps[2::2])
+plt.show()
+'''
+
+#delete - test
+simplerNeuronPath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\simpler_26-Jul_17_58_11.mat"
+acceldata_path = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\AccelData2021-04-28T13_45_51.6713216+01_00.csv"
+buildCrawDF(simplerNeuronPath, acceldata_path)
+
+#open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
+#dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+
+#now, let's create a df for each of the SimplerNeuron.mat files available and store them in Google Drive
+
+#create an array to save the paths of the new FrameDiff.pkl files
+#C_raw_paths = []
+#create a file pattern to name the new files
+'''
+#ADAPT THIS TO THE C_RAW DATA
+#create a new pkl file with a dataframe containing the total body acceleration and respective timestamps
+for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
+    if not isinstance(AccelDataFile, float):
+        print('\n\n----Organize the following file and display the new dataframe----: {}'.format(AccelDataFile))
+        organized_AccelDF = buildAccelDF(AccelDataFile)
+        print(organized_AccelDF)
+        #create the path of the new file
+        temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
+        file_type = "pkl"
+        temp_path.append(file_pattern+AccelDataFile.split('\\')[-1][:-3]+file_type)
+        path2save_organized_AccelDF = '\\'.join(temp_path)
+        print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
+        organized_AccelDF.to_pickle(path2save_organized_AccelDF)
+        TotalBAccelpaths.append(path2save_organized_AccelDF)
+    else:
+        TotalBAccelpaths.append(np.nan)
+
+#create a new column in dystoniaFilesDF to save the path of the new file
+dystoniaFilesDF['TotalBodyAccel.pkl'] = TotalBAccelpaths
+
+#show the df
+print(dystoniaFilesDF)
+
+#save the dataframe as pkl file in google drive -  this will overwrite (update) the first dystoniaFilesDF.csv
+path2saveDF = dystoniaFilesDFpath
+dystoniaFilesDF.to_pickle(path2saveDF)
+print('\n\nThe dystoniaFileDF.pkl file was updated.')
+'''

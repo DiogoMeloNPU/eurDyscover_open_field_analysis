@@ -38,5 +38,5 @@ print(missingDLCanalysis)
 
 #convert to np.array and save the variable as a .npy
 missingDLCanalysis = np.array(missingDLCanalysis)
-save_here = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS"
+save_here = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\missingDLCanalysis.npy"
 np.save(save_here, missingDLCanalysis, allow_pickle=True)

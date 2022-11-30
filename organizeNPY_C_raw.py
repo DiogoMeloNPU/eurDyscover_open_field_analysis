@@ -22,79 +22,57 @@ def buildCrawNPY(path_SimplerNeuron, path_acceldata):
     #save raw calcium signal in a separate array
     C_raw = neuron_mat_info['C_raw']
 
-    #create a dataframe with the C_raw data
-    df_C_raw = pd.DataFrame(C_raw)
-    df_C_raw = df_C_raw.T  # transpose the calcium data
-
-    #generate a label for each neuron of the dataframe (e.g.: neuron_1, neuron_2, ...)
-    neuron_labels = []
-    for neuron in range(1, C_raw.shape[0]+1):
-        neuron_label = 'neuron_'+str(neuron)
-        neuron_labels.append(neuron_label)
-    #change the labels on the dataframe
-    df_C_raw.columns = neuron_labels
+    print(C_raw)
 
     #save the timestamps in a variable
     timestamps = get_microscope_timestamps(path_acceldata)
-
-    #delete - plot the timestamp diffs and check for missing data
-    print(np.diff(timestamps[0:10:2]))
     print(timestamps)
-    print(len(df_C_raw), len(timestamps[2:])/2, len(np.diff(timestamps[0::2])))
 
-    #add a new column with the inscopix timestamps (keep in mind that you should only consider one in each two inscopix timestamps)
-    df_C_raw['Timestamp'] = timestamps[::2]
+    #there are cases in which there is a problem with the timestamps (check 30/11/2022 notebook for a sketch with an example), in a way that the length of the timestamsp doesn't match the length of the C raw data
+    #in those cases, assign -1 to the C_raw array
+    if len(timestamps[::2]) == C_raw.shape[1]:
+        #join the timestamps info in the last position of the array (keep in mind that you should only consider one in each two inscopix timestamps)
+        C_raw = np.vstack((C_raw, timestamps[::2]))
+    else:
+        C_raw = -1
 
-    #delete
-    print(df_C_raw)
+    print(C_raw)
+    #print(C_raw.shape)
 
-    return df_C_raw
-
-#SAVE NPY INSTEAD OF DATAFRAME
-
-'''
-plt.subplot(1,2,1)
-plt.plot(range(len(timestamps[0::2])), timestamps[0::2])
-plt.subplot(1,2,2)
-plt.plot(range(len(timestamps[2::2])), timestamps[2::2])
-plt.show()
-'''
-
-#delete - test
-simplerNeuronPath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\simpler_26-Jul_17_58_11.mat"
-acceldata_path = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\AccelData2021-04-28T13_45_51.6713216+01_00.csv"
-buildCrawNPY(simplerNeuronPath, acceldata_path)
+    return C_raw
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-#dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
-#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
-#now, let's create a df for each of the SimplerNeuron.mat files available and store them in Google Drive
+#now, let's create the C_raw array containing the respective timestamps for each of the SimplerNeuron.mat files available and store them in Google Drive
 
-#create an array to save the paths of the new FrameDiff.pkl files
-#C_raw_paths = []
-#create a file pattern to name the new files
-'''
-#ADAPT THIS TO THE C_RAW DATA
-#create a new pkl file with a dataframe containing the total body acceleration and respective timestamps
-for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
-    if not isinstance(AccelDataFile, float):
-        print('\n\n----Organize the following file and display the new dataframe----: {}'.format(AccelDataFile))
-        organized_AccelDF = buildAccelDF(AccelDataFile)
-        print(organized_AccelDF)
-        #create the path of the new file
-        temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
-        file_type = "pkl"
-        temp_path.append(file_pattern+AccelDataFile.split('\\')[-1][:-3]+file_type)
-        path2save_organized_AccelDF = '\\'.join(temp_path)
-        print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
-        organized_AccelDF.to_pickle(path2save_organized_AccelDF)
-        TotalBAccelpaths.append(path2save_organized_AccelDF)
+#create an array to save the paths of the new C_rawTS.npy files
+C_raw_paths = []
+#create a file pattern to name the new files (C_rawTS, meaning both the C_raw data, as well as the timestamps are in the array)
+file_pattern = 'C_rawTS_'
+#define the file type
+file_type = '.npy'
+
+for row, simplerNeuron in enumerate(dystoniaFilesDF['Simpler_neuron.mat']):
+    if isinstance(simplerNeuron, str):
+        print('\n\n----Organize the following file and display the new C_raw array containing the timestamps----: {}'.format(simplerNeuron))
+        C_rawNPY = buildCrawNPY(simplerNeuron, dystoniaFilesDF['AccelData.csv'][row])
+        if not isinstance(C_rawNPY, int):
+            #create the path of the new file
+            temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
+            temp_path.append(file_pattern+simplerNeuron.split('\\')[-1][:-4]+file_type)
+            path2save_organized_C_rawNPY = '\\'.join(temp_path)
+            print('A new file was created in the following folder: {}'.format(path2save_organized_C_rawNPY))
+            np.save(path2save_organized_C_rawNPY, C_rawNPY)
+            C_raw_paths.append(path2save_organized_C_rawNPY)
+        else:
+            C_raw_paths.append(-1)
     else:
-        TotalBAccelpaths.append(np.nan)
+        C_raw_paths.append(np.nan)
 
 #create a new column in dystoniaFilesDF to save the path of the new file
-dystoniaFilesDF['TotalBodyAccel.pkl'] = TotalBAccelpaths
+dystoniaFilesDF['C_rawNPY'] = C_raw_paths
 
 #show the df
 print(dystoniaFilesDF)
@@ -103,4 +81,16 @@ print(dystoniaFilesDF)
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_pickle(path2saveDF)
 print('\n\nThe dystoniaFileDF.pkl file was updated.')
+
+
+'''#delete - test
+simplerNeuronPath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\simpler_26-Jul_17_58_11.mat"
+acceldata_path = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\D1\\Baseline 1\\42308_RF_B1\\AccelData2021-04-28T13_45_51.6713216+01_00.csv"
+df_C_raw, timestamps = buildCrawNPY(simplerNeuronPath, acceldata_path)
+
+plt.subplot(1, 2, 1)
+plt.plot(range(len(timestamps[0::2])), timestamps[0::2])
+plt.subplot(1, 2, 2)
+plt.plot(range(len(timestamps[2::2])), timestamps[2::2])
+plt.show()
 '''

@@ -131,6 +131,9 @@ for parent in parentFoldersOtherFiles:
                         elif 'framediff' in name: #frameDiff.csv
                             dystoniaFilesDF['FrameDiff.csv'][match.index[0]] = currentFile[2]
                             print('The following file path was added to the "FrameDiff.csv" column: {}\n'.format(currentFile[2]))
+                        elif 'dlc_resnet50_dystonia_testapr21shuffle1_500000' in name:
+                            dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "DLC_coordinate_prediction.csv" column: {}\n'.format(currentFile[2]))
                     elif name.endswith('.avi'): #videoProcessed.avi
                         if 'processed' in name:
                             dystoniaFilesDF['VideoProcessed.avi'][match.index[0]] = currentFile[2]
@@ -144,7 +147,7 @@ path2saveDF = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\E
 dystoniaFilesDF.to_pickle(path2saveDF)
 
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-#DesktopPath = "C:\\Users\\user\\Desktop\\DystoniaDataBase.csv"
-#dystoniaFilesDF.to_csv(DesktopPath)
+DesktopPath = "C:\\Users\\user\\Desktop\\DystoniaDataBase.csv"
+dystoniaFilesDF.to_csv(DesktopPath)
 
 #form here on, this file should not be changed. If you want to improve this file, please perform those changes on a copy (this version is suposed to work only as a database for the file paths for easier and structured access to what is needed for a specific analysis,  which should be implemented in a separate .py module as well)

@@ -131,7 +131,7 @@ for parent in parentFoldersOtherFiles:
                         elif 'framediff' in name: #frameDiff.csv
                             dystoniaFilesDF['FrameDiff.csv'][match.index[0]] = currentFile[2]
                             print('The following file path was added to the "FrameDiff.csv" column: {}\n'.format(currentFile[2]))
-                        elif 'dlc_resnet50_dystonia_testapr21shuffle1_500000' in name:
+                        elif 'dlc_resnet50_dystonia_testapr21shuffle1_500000' in name and 'organized' not in name:
                             dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentFile[2]
                             print('The following file path was added to the "DLC_coordinate_prediction.csv" column: {}\n'.format(currentFile[2]))
                     elif name.endswith('.avi'): #videoProcessed.avi

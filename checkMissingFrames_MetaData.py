@@ -19,12 +19,14 @@ def retrieveMissingFrames(path_xml):
     #
 
     return missingFrames
-
+     
 
 for file_path, subdirs, files in os.walk(file_path):
     for name in files:
         print(os.path.join(file_path, name))
 
         #save the np.array in the respective path as .npy
+
+        #save the path in the respective dataframe cell
 
 #create a new column in the dystoniaFilesDF with the array of missing frames

@@ -16,7 +16,6 @@ def retrieveMissingFrames(path_xml):
     file = minidrom.parse(path_xml)
     
     #
-
     return missingFrames
      
 

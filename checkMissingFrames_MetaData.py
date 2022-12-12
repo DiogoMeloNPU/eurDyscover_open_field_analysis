@@ -1,6 +1,12 @@
 #This module opens metadata files containing information on missing frames and 
 #...retrives the respective missing frames for correction of C_raw data
 
+#The approach will be analogous to other modules: I will search for the files and save
+#the dropped frames as a .npy. Once this is done, I will save all the paths of the 
+#.npy files in the dystoniaFilesDF. I will then be able to search for these files in 
+#the 'organizeNPY_C_raw.py' module, which will have a corresponding C_raw file in the
+#same dystoniaFilesDF row, and correct the C_raw .npy files for dropped frames
+
 # xml - Extensible Markup Language -> tree of elements
 
 #Two libraries for processing xml files
@@ -34,7 +40,7 @@ def retrieveMissingFrames(path_xml):
     print('Searching for dropped frames  in: {}\nResult: {}'.format(path_xml, np.array(droppedFrames)))
 
     return droppedFrames
-     
+        
 
 for file_path, subdirs, files in os.walk(file_path):
     for name in files:

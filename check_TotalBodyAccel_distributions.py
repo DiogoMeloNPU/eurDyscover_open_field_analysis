@@ -28,6 +28,7 @@ plt.title("Log scale distributions", fontsize=20)
 plt.xlabel("Data Point")
 plt.ylabel("Timestamp (s)")
 
+#print all the timestamps
 for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
     if not isinstance(AccelDataFile, float):
         print('\n\n----Check inscopix timestamps from this file----: {}'.format(AccelDataFile))

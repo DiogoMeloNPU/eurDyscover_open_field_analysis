@@ -7,13 +7,13 @@ import pandas as pd
 from organize_AccelDataTimestamps import open_AccelData_asDF, get_microscope_timestamps
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
     if not isinstance(AccelDataFile, float):
         print('\n\n----Check inscopix timestamps from this----: {}'.format(AccelDataFile))
-        timestamps = get_microscope_timestamps(AccelDataFile)
+        timestamps = get_microscope_timestamps('G' + AccelDataFile[1:])
         plt.plot(timestamps)
         plt.show()
 

@@ -7,14 +7,19 @@ This project contains all the scripts I developed so far for organization and an
 
 It includes:
 
-## 1. Dystonia Analysis Environment
+## 1. Dystonia Analysis virtual environment
 - Necessary to deal with dependencies.
 
 ## 2. Jupyter Notebooks Folder
 - Several preliminary analysis.
 
 ## 3. Matlab files for generation of processed CNMFE dictionaries that can be opened in python
-- This include x, y, and z, which are necessary for generating the matlab files that can be opened in python
+- This includes:
+1. Batch_convertSources2D_simplerFiles.m (searches for all .mat files)
+2. Sources2D_to_simple_mat.m (converts these files into a basic .mat file that can be opened in Python using scipy.io.loadmat.)
+3. Sources2D.m (matlab class)
+
+Source2D class doesn't exist in Python. So, to work with this information in Python it is necessary to create new files in which 'neuron', a Sources2D object, is unfolded into matrices that can be manipulated in Python, as lists or numpy arrays. This script performs the described task by searching for the original CNFME mat files in the folder 'Organized_data_JAS' (GoogleDrive) and generates the desired simpler/readable .mat file in the respective folder for easy access. Keep in mind that for this, you need to have the path of your function 'Sources2D_to_simple_mat.m', as well as 'Sources2D.m' in your MATLAB search path.
 
 ## 4. .py files for creating a dataframe with all path and replicating the current state of the analysis for all groups
 
@@ -30,3 +35,7 @@ Maybe create a module that runs all the above mentioned modules and saves the da
 Add indications for other possible users, namely the order in which the files should be run.
 
 I want to improve this description, however I am now focused on creating a database with all the files for every mice, in order to replicate the analysis developed in **Single_session_analysis.ipynb**.
+
+So far, the data used to develop the current pipeline corresponds to the following Google Drive Folders.
+
+Describe all the types of raw available data

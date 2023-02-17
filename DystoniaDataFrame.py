@@ -39,7 +39,7 @@ dystoniaFilesDF.columns = dystoniaMiceInfoDF.columns
 #                                                                                         FrameDiff_Centroid.csv, 
 #                                                                                         VideoProcessed.avi)
 files_available = ['neuron.mat', 'Simpler_neuron.mat', 'AccelData.csv', 'DLC_coordinate_prediction.csv',
-                   'FrameDiff.csv', 'VideoProcessed.avi']
+                   'FrameDiff.csv', 'VideoProcessed.avi', 'MetadataInscopix.xml']
 
 for file_type in files_available:
     dystoniaFilesDF[file_type] = np.nan
@@ -138,7 +138,9 @@ for parent in parentFoldersOtherFiles:
                         if 'processed' in name:
                             dystoniaFilesDF['VideoProcessed.avi'][match.index[0]] = currentFile[2]
                             print('The following file path was added to the "VideoProcessed.avi" column: {}\n'.format(currentFile[2]))
-
+                    elif name.endswith('.xml'): # metadata.xml
+                        dystoniaFilesDF['MetadataInscopix.xml'][match.index[0]] = currentFile[2]
+                        print('The following file path was added to the "MetadataInscopix.xml" column: {}\n'.format(currentFile[2]))
 #show the dataframe
 print(dystoniaFilesDF)
 

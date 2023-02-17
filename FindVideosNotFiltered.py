@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 #create a variable to save the paths of the videos whose DLC predictions were not filtered
@@ -37,5 +37,5 @@ print(missingFiltering)
 
 #convert to np.array and save the variable as a .npy
 missingFiltering = np.array(missingFiltering)
-save_here = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\missingFiltering.npy"
+save_here = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\missingFiltering.npy"
 np.save(save_here, missingFiltering, allow_pickle=True)

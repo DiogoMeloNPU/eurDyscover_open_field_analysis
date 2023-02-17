@@ -7,7 +7,7 @@ import pandas as pd
 import os
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 #create a variable to save the paths of the videos that were not analyzed
@@ -38,5 +38,5 @@ print(missingDLCanalysis)
 
 #convert to np.array and save the variable as a .npy
 missingDLCanalysis = np.array(missingDLCanalysis)
-save_here = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\missingDLCanalysis.npy"
+save_here = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\missingDLCanalysis.npy"
 np.save(save_here, missingDLCanalysis, allow_pickle=True)

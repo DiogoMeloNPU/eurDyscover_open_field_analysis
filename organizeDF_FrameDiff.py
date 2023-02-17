@@ -34,6 +34,10 @@ def buildFrameDiffDF(frameDiffPath):
             num_digits = 2
             date = re.search(
                 r' \d\d \d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])', df_frameDiff.iloc[index][0])
+        if date == None:
+            num_digits = 3
+            date = re.search(
+                r' \d\d\d \d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])', df_frameDiff.iloc[index][0])
         if num_digits == 1:
             df_frameDiff.at[index, 'Frame diff'] = date.group()[1]
         elif num_digits == 2:
@@ -46,7 +50,7 @@ def buildFrameDiffDF(frameDiffPath):
     return df_frameDiff
 
 #open the dystoniaFilesDF.pkl that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 #now, let's create a dataframe for each of the FrameDiff files available and store them in Google Drive
@@ -82,3 +86,7 @@ print(dystoniaFilesDF)
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_pickle(path2saveDF)
 print('\n\nThe dystoniaFilesDF.pkl file was updated.')
+
+#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
+DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
+dystoniaFilesDF.to_csv(DesktopPath)

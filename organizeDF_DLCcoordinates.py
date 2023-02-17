@@ -71,7 +71,7 @@ def buildDLCpredictionsDF(path_predictions_DLC, path_acceldata, framediff_path):
     return df_DLC #dataframe with the DLC predictions
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 #create an array to save the paths of the new OrganizedDLC files
@@ -111,3 +111,7 @@ print(dystoniaFilesDF)
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_pickle(path2saveDF)
 print('\n\nThe dystoniaFileDF.pkl file was updated.')
+
+#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
+DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
+dystoniaFilesDF.to_csv(DesktopPath)

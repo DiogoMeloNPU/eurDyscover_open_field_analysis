@@ -13,15 +13,15 @@
 # xml.sax -> Simple API for XML (you can read pieces only and not the full file, in case of lack of resources, not enough RAM, for example)
 # xml.dom -> Document Object Model
 
+import pandas as pd
 import os
 from os import walk
 import numpy as np
 import xml.etree.ElementTree as ET
 
-#parent file path
-file_path = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Imaging"
-
-test_xml_file = "E:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Imaging\\A2A G1\\W03\\43509_RF_W3\\recording_20210819_125428.xml"
+#open the dystoniaFilesDF.pkl that was created in DystoniaDataFrame.py
+dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 def retrieveMissingFrames(path_xml):
     '''
@@ -36,18 +36,45 @@ def retrieveMissingFrames(path_xml):
     #convert it to a numpy array
     droppedFrames = np.array(droppedFrames)
 
-    #inform the user about the file that is being processed, and show the array of dropped frames
-    print('Searching for dropped frames  in: {}\nResult: {}'.format(path_xml, np.array(droppedFrames)))
-
     return droppedFrames
-        
 
-for file_path, subdirs, files in os.walk(file_path):
-    for name in files:
-        print(os.path.join(file_path, name))
+# use the following path to produce a file list
+parentFolderOtherFiles_D1 = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\D1"
+parentFolderOtherFiles_D2 = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\D2"
+parentFoldersOtherFiles = np.array([parentFolderOtherFiles_D1, parentFolderOtherFiles_D2])
 
-        #save the np.array in the respective path as .npy
+# create an array to save the paths of the new droppedFrames.npy files
+droppedFramesInscPaths = []
+# create a file pattern to name the new files
+file_pattern = 'droppedFramesInscopix_'
+#create a new pkl file with a dataframe containing the frame diff values
+for row, metaDataInscFile in enumerate(dystoniaFilesDF['MetadataInscopix.xml']):
+    if isinstance(metaDataInscFile, str):
+        print('\n\n----Extract and display the dropped frames for this inscopix file----: {}'.format(metaDataInscFile))
+        droppedFrames_npy = retrieveMissingFrames(metaDataInscFile)
+        print(droppedFrames_npy)
+        #create the path of the new file
+        temp_path = dystoniaFilesDF['MetadataInscopix.xml'].iloc[row].split('\\')[:-1]
+        file_type = 'npy'
+        temp_path.append(file_pattern+metaDataInscFile.split('\\')[-1][:-3]+file_type)
+        path2save_droppedFrames_npy = '\\'.join(temp_path)
+        print('A new file was created in the following folder: {}'.format(path2save_droppedFrames_npy))
+        np.save(path2save_droppedFrames_npy, droppedFrames_npy)
+        droppedFramesInscPaths.append(path2save_droppedFrames_npy)
+    else:
+        droppedFramesInscPaths.append(np.nan)
 
-        #save the path in the respective dataframe cell
+#create a new column in dystoniaFilesDF to save the path of the new line
+dystoniaFilesDF['droppedFramesInscop.npy'] = droppedFramesInscPaths
 
-#create a new column in the dystoniaFilesDF with the array of missing frames
+#show the df
+print(dystoniaFilesDF)
+
+#save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
+path2saveDF = dystoniaFilesDFpath
+dystoniaFilesDF.to_pickle(path2saveDF)
+print('\n\nThe dystoniaFilesDF.pkl file was updated.')
+
+#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
+DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
+dystoniaFilesDF.to_csv(DesktopPath)

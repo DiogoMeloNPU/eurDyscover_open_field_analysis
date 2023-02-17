@@ -18,8 +18,8 @@ format longg;
 format compact;
 
 % Define a starting folder.
-start_paths = [fullfile('E:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Organized_data_JAS\D1'), 
-               fullfile('E:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Organized_data_JAS\D2')];
+start_paths = [fullfile("J:\O meu disco\EurDyscover\Dystonia_Data\D1"), 
+               fullfile("J:\O meu disco\EurDyscover\Dystonia_Data\D2")];
            
 for dopReceptor = 1:size(start_paths,1)
     % Ask user to confirm or change.

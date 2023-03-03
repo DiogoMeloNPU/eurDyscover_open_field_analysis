@@ -39,7 +39,7 @@ dystoniaFilesDF.columns = dystoniaMiceInfoDF.columns
 #                                                                                         FrameDiff_Centroid.csv, 
 #                                                                                         VideoProcessed.avi)
 files_available = ['neuron.mat', 'Simpler_neuron.mat', 'AccelData.csv', 'DLC_coordinate_prediction.csv',
-                   'FrameDiff.csv', 'VideoProcessed.avi', 'MetadataInscopix.xml']
+                   'FrameDiff.csv', 'VideoProcessed.avi', 'MetadataInscopix.xml', 'DLC_coordinate_prediction.h5']
 
 for file_type in files_available:
     dystoniaFilesDF[file_type] = np.nan
@@ -134,6 +134,10 @@ for parent in parentFoldersOtherFiles:
                         elif 'dlc_resnet50_dystonia_testapr21shuffle1_500000' in name and 'organized' not in name:
                             dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentFile[2]
                             print('The following file path was added to the "DLC_coordinate_prediction.csv" column: {}\n'.format(currentFile[2]))
+                    elif name.endswith('.h5'):
+                        if 'dlc_resnet50_dystonia_testapr21shuffle1_500000' in name and 'organized' not in name:
+                            dystoniaFilesDF['DLC_coordinate_prediction.h5'][match.index[0]] = currentFile[2]
+                            print('The following file path was added to the "DLC_coordinate_prediction.h5" column: {}\n'.format(currentFile[2]))
                     elif name.endswith('.avi'): #videoProcessed.avi
                         if 'processed' in name:
                             dystoniaFilesDF['VideoProcessed.avi'][match.index[0]] = currentFile[2]
@@ -142,7 +146,7 @@ for parent in parentFoldersOtherFiles:
                         dystoniaFilesDF['MetadataInscopix.xml'][match.index[0]] = currentFile[2]
                         print('The following file path was added to the "MetadataInscopix.xml" column: {}\n'.format(currentFile[2]))
 #show the dataframe
-print(dystoniaFilesDF)
+print(dystoniaFilesDF) 
 
 #save the dataframe as a pickle file in google drive
 path2saveDF = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"

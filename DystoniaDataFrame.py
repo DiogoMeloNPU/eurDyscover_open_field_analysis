@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 
-dystoniaMiceInfoPath = "J:\\O meu disco\\EurDyscover\\Mice list_Dystonia_WORKING_230922.xlsx"
+dystoniaMiceInfoPath = "J:\O meu disco\EurDyscover\Mice list_Dystonia_WORKING_230922.xlsx"
 dystoniaMiceInfoDF = pd.read_excel(dystoniaMiceInfoPath)
 #process the dataframe in order to have a single continous list
 

@@ -7,7 +7,7 @@ import numpy as np
 import dlc2kinematics
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 # create an array to save the paths of the new DLC speed files (tailbase)
@@ -19,11 +19,13 @@ file_type = 'pkl'
 
 for row, h5_DLC in enumerate(dystoniaFilesDF['DLC_coordinate_prediction.h5']):
     if isinstance(h5_DLC, str):
+        beginningPath = 'G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
+        h5_DLC = beginningPath + h5_DLC[14:]
         print(f'\n\n----Organize the following file and display the new dataframe----: {h5_DLC}')
         df, bodyparts, scorer = dlc2kinematics.load_data(h5_DLC)
-        df_speed = dlc2kinematics.compute_speed(df,bodyparts=['tailbase'], filter_window=3, order=1)
+        df_speed = dlc2kinematics.compute_speed(df,bodyparts=['tailbase'], filter_window=5, order=1)
         # create the path of the new file 
-        temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
+        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[2:-1]
         file_type = '.npy'
         temp_path.append(file_pattern + h5_DLC.split('\\')[-1][:-3] + file_type)
         path2save_speedDLC = '\\'.join(temp_path)
@@ -37,7 +39,7 @@ for row, h5_DLC in enumerate(dystoniaFilesDF['DLC_coordinate_prediction.h5']):
         speedDLCpaths.append(np.nan)    
 
 # create a new column in dystoniaFilesDF to save the path of the new line
-dystoniaFilesDF['npy_speed_DLC.pkl'] = speedDLCpaths
+dystoniaFilesDF['npy_speed_DLC.npy'] = speedDLCpaths
 
 # show the df
 print(dystoniaFilesDF)
@@ -48,5 +50,5 @@ dystoniaFilesDF.to_pickle(path2saveDF)
 print('\n\nThe dystoniaFilesDF.pkl file was updated.')
 
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
+DesktopPath = "C:\\Users\\diogo\\OneDrive\\Ambiente de Trabalho\\DystoniaDataBase.csv"
 dystoniaFilesDF.to_csv(DesktopPath)

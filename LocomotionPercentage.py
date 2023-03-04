@@ -76,7 +76,7 @@ dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 percentageLocomotionPaths = []
 
 # create a file pattern for the new files containing the percentages
-file_pattern = 'percentagesLocomotion'
+file_pattern = 'percentagesLocomotion_'
 
 for row, npy_speedDLC in enumerate(dystoniaFilesDF['npy_speed_DLC.pkl']):
     if isinstance(npy_speedDLC, str):
@@ -85,10 +85,12 @@ for row, npy_speedDLC in enumerate(dystoniaFilesDF['npy_speed_DLC.pkl']):
         percentagesLocomotion = np.array([percent1, percent2, percent3, percent4])
         print(percentagesLocomotion)
         #create the path of the new file
-        temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
-        file_type = '.npy'
+        beginningPath = 'G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
+        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[2:-1]
+        file_type = 'npy'
         temp_path.append(file_pattern + npy_speedDLC.split('\\')[-1][:-3] + file_type)
         path2save_percentages = '\\'.join(temp_path)
+        np.save(path2save_percentages, percentagesLocomotion)
         print('A new file was created in the following folder: {}'.format(path2save_percentages))
         percentageLocomotionPaths.append(path2save_percentages)
     else:

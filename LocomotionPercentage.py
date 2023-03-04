@@ -59,13 +59,6 @@ def locomotionPercentages(npy_speedPath):
 
     return percentageLocomotionInSession, percentageLocomotionInSession_st_nd, percentageLocomotionInSession_nd_rd, percentageLocomotionInSession_above_rd
 
-# define groups for analysis
-surgeries = ['SNL', 'Sham']
-genotypes = ['DYT1', 'WT']
-sessions = ['BL1', 'W3', 'W9']
-
-groups = np.array(np.meshgrid(surgeries, genotypes, sessions)).T.reshape(-1, 3)
-
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
 dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)

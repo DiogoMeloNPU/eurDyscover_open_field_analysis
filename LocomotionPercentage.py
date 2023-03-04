@@ -108,9 +108,3 @@ print('\n\nThe dystoniaFilesDF.pkl file was updated.')
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
 DesktopPath = "C:\\Users\\diogo\\OneDrive\\Ambiente de Trabalho\\DystoniaDataBase.csv"
 dystoniaFilesDF.to_csv(DesktopPath)
-
-'''# group analysis
-for group in groups: 
-    respectiveFiles = dystoniaFilesDF['npy_speed_DLC.pkl'].loc[(dystoniaFilesDF['Surgery'] == group[0]) & (dystoniaFilesDF['Genotype'] == group[1]) & (dystoniaFilesDF['Session'] == group[2])]
-    respectiveFiles = [file for file in respectiveFiles if isinstance(file, str)]
-    print(respectiveFiles)'''

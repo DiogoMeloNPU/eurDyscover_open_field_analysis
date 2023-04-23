@@ -47,16 +47,25 @@ def distanceTravelled(npy_speedPath):
     # time spend locomoting
     duration_s_Locomotion = numDataPointsLocomotion/(camera_aq_rate)
 
-    # compute session duration
+    # compute session duration in seconds
     session_duration_s = (speedTailBase.shape[1])/(camera_aq_rate)
 
-    # compute the distance travelled in the current session
-    distanceTravelledTailbase = meanSpeedLocomotion*duration_s_Locomotion
+    # compute session duration in minutes
+    session_duration_min = session_duration_s / 60
 
-    # normalize the distance travelled to session duration (~20min baseline; ~10min other sessions)
-    distanceTravelledTailbaseNormalized = distanceTravelledTailbase/session_duration_s
+    # compute the distance travelled in the current session in cm
+    distanceTravelledTailbase_cm = meanSpeedLocomotion*duration_s_Locomotion
 
-    return distanceTravelledTailbase, distanceTravelledTailbaseNormalized
+    # normalize the distance travelled in cm to session duration (~20min baseline; ~10min other sessions)
+    distanceTravelledTailbaseNormalized_cm = distanceTravelledTailbase_cm/session_duration_min
+    
+    # compute the distance travelled in the current session in meters (m)
+    distanceTravelledTailbase_m = distanceTravelledTailbase_cm / 100
+
+    # normalize the distance travelled in meters to session duration
+    distanceTravelledTailbaseNormalized_m = distanceTravelledTailbaseNormalized_cm / 100
+
+    return distanceTravelledTailbase_m, distanceTravelledTailbaseNormalized_m
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
 dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"

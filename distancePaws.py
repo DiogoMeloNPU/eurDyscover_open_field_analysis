@@ -55,7 +55,7 @@ def ratioDigitalTipsHeels(path_h5_DLC, npy_speedPath):
     npy_ratio_distances = np.array(df_coordinatesDLC_standingStill_hindPaws.ratio_digitalTips_heels)
 
     # obtain the mean value for the whole session
-    mean_ratio_digitalTips_heels = np.mean(npy_ratio_distances); print(mean_ratio_digitalTips_heels)
+    mean_ratio_digitalTips_heels = np.mean(npy_ratio_distances); print(mean_ratio_digitalTips_heels); print('\n')
 
     return npy_ratio_distances, mean_ratio_digitalTips_heels
 
@@ -78,7 +78,7 @@ for row, (npy_speedDLC, DLC_h5_file) in enumerate(zip(dystoniaFilesDF['npy_speed
     if isinstance(npy_speedDLC, str) and isinstance(DLC_h5_file, str):
         # correct path of DLC.h5 files
         DLC_h5_file = corrected_DLC_path + '\\'.join(DLC_h5_file.split('\\')[2:]); print(DLC_h5_file)
-        print(f'\n\n----Processing the following files----: {npy_speedDLC} and {DLC_h5_file}')
+        # print(f'\n\n----Processing the following files----: {npy_speedDLC} and {DLC_h5_file}')
         npy_ratio_distances, mean_ratio_digitalTips_heels = ratioDigitalTipsHeels(DLC_h5_file, npy_speedDLC)
         print(npy_ratio_distances)
         # create the path of the new file
@@ -88,13 +88,13 @@ for row, (npy_speedDLC, DLC_h5_file) in enumerate(zip(dystoniaFilesDF['npy_speed
         temp_path.append(file_pattern + npy_speedDLC.split('\\')[-1][:-3] + file_type)
         path2save_results = '\\'.join(temp_path)
         np.save(path2save_results, npy_ratio_distances)
-        print('A new file was created in the following folder: {}'.format(path2save_results))
+        # print('A new file was created in the following folder: {}'.format(path2save_results))
         ratio_hindPaws_paths.append(path2save_results)
     else:
         ratio_hindPaws_paths.append(np.nan)
 
-'''#create a new column in dystoniaFilesDF to save the path of the new line
-dystoniaFilesDF['ratio_hindPaws.npy'] = ...Paths
+#create a new column in dystoniaFilesDF to save the path of the new line
+dystoniaFilesDF['ratio_hindPaws.npy'] = ratio_hindPaws_paths
 
 #show the df
 print(dystoniaFilesDF)
@@ -103,7 +103,3 @@ print(dystoniaFilesDF)
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_pickle(path2saveDF)
 print('\n\nThe dystoniaFilesDF.pkl file was updated.')
-
-#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-DesktopPath = "C:\\Users\\diogo\\OneDrive\\Ambiente de Trabalho\\DystoniaDataBase.csv"
-dystoniaFilesDF.to_csv(DesktopPath)'''

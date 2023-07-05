@@ -1,7 +1,10 @@
-import general_purpose_modules as gp
+import sys
+sys.path.append("C:\\Users\\Administrador\\DystoniaAnalysis")
+
+import general_use_functions as guf
 
 # load dystonia database
-dystonia_database = gp.load_dystonia_database()
+dystonia_database = guf.load_dystonia_database()
 print(dystonia_database)
 
 # access all acceleration files

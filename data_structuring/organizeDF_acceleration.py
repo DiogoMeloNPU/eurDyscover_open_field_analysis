@@ -3,14 +3,17 @@
 # FrameDiff.csv, VideoProcessed.csv)
 #finally is updates the dystoniaFilesDF.csv with a new column with the paths for the files created here
 
+import sys
+sys.path.append("C:\\Users\\Administrador\\DystoniaAnalysis")
+
 from os import walk
 import pandas as pd
 import numpy as np
-import os
 from scipy import signal
-import math
 #import the module necessary for obtaining the acceleration timestamps
 from organize_AccelDataTimestamps import open_AccelData_asDF, get_accelerometer_timestamps
+# import module with functions to access database
+import general_use_functions as guf
 
 #create a function that calculates the vector magnitude (total body acceleration from the x, y and z components)
 def calculate_totalBodyAcceleration(path):
@@ -93,44 +96,59 @@ def buildAccelDF(acceldata_path):
 
     return df_acceleration
 
-#open the dystoniaFilesDF.pkl that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+# load dystonia database
+dystoniaFilesDF = guf.load_dystonia_database()
 
 #now it is necessary to create a dataframe for each of the acceleration files available and store them in Google Drive
 
 #create an array to save the paths of the new TotalBAccel.pkl files
 TotalBAccelpaths = []
+
 #creat a file pattern to name the new files
 file_pattern = 'TotalBAccel_'
+
 #create a new pkl file with a dataframe containing the total body acceleration and respective timestamps
 for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
+    
     if not isinstance(AccelDataFile, float):
+        
+        # print 
         print('\n\n----Organize the following file and display the new dataframe----: {}'.format(AccelDataFile))
+        
+        # build proper path for the local use to access data
+        guf.allow_local_search(AccelDataFile)
+
+        # organize acceleration data with timestamps from one session 
         organized_AccelDF = buildAccelDF(AccelDataFile)
+        
+        # display the st
         print(organized_AccelDF)
+
         #create the path of the new file
         temp_path = dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[:-1]
+        
+        # define file extension
         file_type = "pkl"
+        
+        # 
         temp_path.append(file_pattern+AccelDataFile.split('\\')[-1][:-3]+file_type)
         path2save_organized_AccelDF = '\\'.join(temp_path)
+        
+        # inform the user that a new file was created
         print('A new file was created in the following folder: {}'.format(path2save_organized_AccelDF))
+        
+        # save the new structured file as pickle
         organized_AccelDF.to_pickle(path2save_organized_AccelDF)
+        
+        # save the path of the file that was created in the list of paths
         TotalBAccelpaths.append(path2save_organized_AccelDF)
     else:
+
+        # if no file was created for a particular session, then leave the cell empty
         TotalBAccelpaths.append(np.nan)
 
 #create a new column in dystoniaFilesDF to save the path of the new file
 dystoniaFilesDF['TotalBodyAccel.pkl'] = TotalBAccelpaths
 
-#show the df
-print(dystoniaFilesDF)
-
-#save the dataframe as pkl file in google drive -  this will overwrite (update) the first dystoniaFilesDF.csv
-path2saveDF = dystoniaFilesDFpath
-dystoniaFilesDF.to_pickle(path2saveDF)
-print('\n\nThe dystoniaFileDF.pkl file was updated.')
-
-#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
-dystoniaFilesDF.to_csv(DesktopPath)
+# call function to update dystonia database
+guf.update_dystonia_database(dystoniaFilesDF, True)

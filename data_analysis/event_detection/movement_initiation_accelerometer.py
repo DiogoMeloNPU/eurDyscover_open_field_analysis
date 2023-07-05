@@ -1,6 +1,8 @@
+# to access the general use module you need to add the parent folder to the path
 import sys
 sys.path.append("C:\\Users\\Administrador\\DystoniaAnalysis")
 
+# import module with functions to access database
 import general_use_functions as guf
 
 # load dystonia database
@@ -8,6 +10,10 @@ dystonia_database = guf.load_dystonia_database()
 print(dystonia_database)
 
 # access all acceleration files
+print(dystonia_database[''])
+
+
+
 
 # establish a treshold for movement initiation using acceleration (accelerometer palced in the head)
 

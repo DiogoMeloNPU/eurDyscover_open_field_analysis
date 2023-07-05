@@ -7,13 +7,19 @@ import numpy as np
 # load dystonia database
 def load_dystonia_database():
     
+    # file path
     dystoniaFilesDFpath = "G:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data"
+    # open pickle file as df
     dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
     return dystoniaFilesDF
 
 # save updated dystonia database
-def update_dystonia_database():
+def update_dystonia_database(dystoniaFilesDF):
 
+    # define a path for the updated file
+    path2saveDF = "G:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data"
+    # save the dataframe as pickle
     dystoniaFilesDF.to_pickle(path2saveDF)
+    # inform the user that the file wa successfully updated
     print('\n\nThe dystoniaFilesDF.pkl file was updated.')

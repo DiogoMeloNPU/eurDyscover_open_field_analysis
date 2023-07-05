@@ -1,5 +1,5 @@
-from general_purpose_modules
- 
+import general_purpose_modules as gp
+
 # load dystonia database
 dystonia_database = gp.load_dystonia_database()
 print(dystonia_database)

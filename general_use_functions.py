@@ -34,4 +34,4 @@ def allow_local_search(file_path_in_database):
 
     # obtain the fixed part of the file path (ex: 'EurDyscover\\Dystonia_Data\\...\\example_file.pkl') - should change the file that creates the dataframe to already save it like this
 
-    # cut the variable part from the (this should be done in the )
+    # cut the variable part from the (this should be done in the ) 

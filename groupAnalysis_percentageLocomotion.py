@@ -29,16 +29,18 @@ for group in groups:
     groupSpecs = '_'.join(group)
     groupFiles = getPercentageLocomotion(group)
     groupValues = np.array([np.load(file) for file in groupFiles])
+    groupValues_n = int(groupValues.shape[0])
     groupValues_mean = np.round(np.mean(groupValues, axis = 0), 3) 
     groupValues_std = np.round(np.std(groupValues, axis = 0), 3)
     mean_std = np.concatenate((groupValues_mean, groupValues_std))
-    dictResults[groupSpecs] = mean_std
+    mean_std_n = np.append(mean_std, groupValues_n)
+    dictResults[groupSpecs] = mean_std_n
 
 # display the results
 df_results = pd.DataFrame(dictResults)
 
 # change the row indexes
-df_results.index = ['% Locomotion', '% 5-10 cm/s', '% 10-20 cm/s', '% +20 cm/s', 'std_1', 'std_2', 'std_3', 'std_4']
+df_results.index = ['% Locomotion', '% 5-10 cm/s', '% 10-20 cm/s', '% +20 cm/s', 'std_1', 'std_2', 'std_3', 'std_4', 'n']
 
 # transpose the dataframe
 df_results = df_results.transpose()
@@ -48,7 +50,10 @@ print(df_results)
 # create bar plot
 # df_results.plot.line(y = '% Locomotion')
 # display figure
-#plt.show()
+# plt.show()
 
 plt.bar(df_results.index, df_results['% Locomotion'], yerr = df_results['std_1'], capsize=10)
 plt.show()
+
+path2save_csv = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\groupAnalysis_locomotionPercentages.csv"
+df_results.to_csv(path2save_csv)

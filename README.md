@@ -86,5 +86,6 @@ In development...
 4. Probability density function is not very informative as it is. It should include initiations detected using the accelerometer for every event
 5. Alignment of different types of data (considering the different acquisition rates and the timestamps)
 6. Separate module to build the complete figure with the DLC analysis
+7. There shoudl be something facilitating local use of the database, for example providing the path until the folder in which the project is locally ans use it to perform searches in the dataframe
 In development...
 

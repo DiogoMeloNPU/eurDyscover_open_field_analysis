@@ -36,4 +36,4 @@ for row, AccelDataFile in enumerate(dystoniaFilesDF['AccelData.csv']):
         timestamps = get_microscope_timestamps(AccelDataFile)
         #updating data values
         distr.set_ydata(timestamps)
-        #plt.plot(timestamps)
+        plt.plot(timestamps)

@@ -1,4 +1,4 @@
-# Dystonia Analysis
+# eurDyscover Open Field Analysis
 
 In development...
 

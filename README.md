@@ -3,15 +3,15 @@
 In development...
 
 ## Goal
-This project has the goal of generalizing the notebooks to be able to automatically obtain single subject analysis for all sessions of all mice, as well as perform group level analysis.
+This project has the goal of generalising python notebooks containing preliminary analysis of open field data. My aim is to automatically obtaining single subject analysis for all sessions of all mice, as well as performing group level analysis.
 
 ## Structure
 
-This project contains all the scripts I developed so far for organization and analysis of the data available from the Dystonia Project.
+This project contains all the scripts I developed so far for organisation and analysis of the data available from the EurDyscover project adressing the double hit hypothesis for the development of dystonia.
 
-Following is a description of the project structure and data used
+Following is a description of the project structure and data used so far:
 
-### 1. Dystonia Analysis virtual environment
+### 1. Dystonia Analysis virtual environment (ignore for know)
 - Corresponds to the **venv_dystoniaAnalysis** folder. Necessary to deal with dependencies.
 - You will need to change **pyvenv.cfg** file according to the path of your python executable.
 

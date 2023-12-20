@@ -8,7 +8,7 @@ from os.path import dirname, join as pjoin
 import scipy.io as sio
 import pandas as pd
 #import the module necessary for obtaining the Inscopix timestamps
-from organize_AccelDataTimestamps import open_AccelData_asDF, get_microscope_timestamps
+from data_structuring.organize_accel_data_timestamps import open_AccelData_asDF, get_microscope_timestamps
 
 #create a function that builds the dataframe given the path a 'Simpler_neuron.mat' and 'AccelData.csv' files
 def buildCrawDF(path_SimplerNeuron, path_acceldata):

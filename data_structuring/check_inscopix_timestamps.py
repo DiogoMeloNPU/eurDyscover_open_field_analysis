@@ -4,7 +4,7 @@ from os.path import dirname, join as pjoin
 import scipy.io as sio
 import pandas as pd
 #import the module necessary for obtaining the Inscopix timestamps
-from organize_AccelDataTimestamps import open_AccelData_asDF, get_microscope_timestamps
+from data_structuring.organize_accel_data_timestamps import open_AccelData_asDF, get_microscope_timestamps
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
 dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Organized_data_JAS\\dystoniaFilesDF.pkl"

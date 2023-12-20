@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import os
 #import the module necessary for obtaining the camera timestamps
-from organize_AccelDataTimestamps import open_AccelData_asDF, get_camera_timestamps
+from data_structuring.organize_accel_data_timestamps import open_AccelData_asDF, get_camera_timestamps
 
 def buildDLCpredictionsDF(path_predictions_DLC, path_acceldata, framediff_path):
     '''

@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 from scipy import signal
 #import the module necessary for obtaining the acceleration timestamps
-from organize_AccelDataTimestamps import open_AccelData_asDF, get_accelerometer_timestamps
+from data_structuring.organize_accel_data_timestamps import open_AccelData_asDF, get_accelerometer_timestamps
 # import module with functions to access database
 import general_use_functions as guf
 

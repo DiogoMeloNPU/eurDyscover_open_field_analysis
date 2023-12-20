@@ -3,29 +3,30 @@
 In development...
 
 ## Goal
-This project has the goal of generalising python notebooks containing preliminary analysis of open field data. My aim is to automatically obtaining single subject analysis for all sessions of all mice, as well as performing group level analysis.
-
+This project has the goal of generalising python notebooks containing preliminary analysis of open field data from experiments related to the EurDyscover project developed @ Alves da Silva lab, Champalimaud Foundation. My aim is to automate single subject and group analysis reports for the experiments performed so far.
 ## Structure
+This project contains all the scripts I've developed so far for organisation and analysis of the data available.
 
-This project contains all the scripts I developed so far for organisation and analysis of the data available from the EurDyscover project adressing the double hit hypothesis for the development of dystonia.
+Following is a description of the project structure and data used:
 
-Following is a description of the project structure and data used so far:
-
-### 1. Dystonia Analysis virtual environment (ignore for know)
-- Corresponds to the **venv_dystoniaAnalysis** folder. Necessary to deal with dependencies.
+### 1. venv_dystoniaAnalysis (ignore for know)
+- Virtual environment. Necessary to deal with dependencies.
 - You will need to change **pyvenv.cfg** file according to the path of your python executable.
 
-### 2. Jupyter Notebooks Folder
-- Several preliminary analysis, including a script for analysis of a single session of the Dystonia Open Field recordings was developed and reproduced for 4 sessions (Wt/Bl; Wt/W09; DYTd1/Bl; DYTd1/W09) in 4 different Jupyter Notebooks. These files are being used to generalize the analysis for all subjects.
-- **Single_session_analysis.ipynb** (main script)
+### 2. data_analysis
 
-### 3. Matlab files for generation of processed CNMF-E dictionaries that can be opened using python
-- This includes:
+### 3. data_structuring
+
+### 4. preprocess_cnmfe_mat2py
 1. **Batch_convertSources2D_simplerFiles.m** (searches for all neuron.mat files and calls **Sources2D_to_simple_mat.m**)
 2. **Sources2D_to_simple_mat.m** (converts these files into a basic .mat file that can be opened in Python using scipy.io.loadmat.)
 3. **Sources2D.m** (matlab class)
 
 - Source2D class doesn't exist in Python. So, to work with this information in Python it is necessary to create new files in which 'neuron', a Sources2D object, is unfolded into matrices that can be manipulated in Python, as lists or numpy arrays. This script performs the described task by searching for the original CNFME mat files in the folder 'Organized_data_JAS' (Google Drive) and generates the desired simpler/readable .mat file in the respective folder for easy access. Keep in mind that for this, you need to have the path of your function 'Sources2D_to_simple_mat.m', as well as 'Sources2D.m' in your MATLAB search path.
+
+### 5. Jupyter notebooks
+- Several preliminary analysis, including a script for single session analysis was developed and reproduced for 4 example sessions (Wt/Bl; Wt/W09; DYTd1/Bl; DYTd1/W09) in 4 different Jupyter Notebooks. These files are being used to generalize the analysis for all subjects.
+- **Single_session_analysis.ipynb** (main script)
 
 ### 4. Python files
 
@@ -50,7 +51,7 @@ Following is a description of the project structure and data used so far:
 1. **FindVideosNotAnalyzed.py** (generates missingDLCanalysis.npy)
 2. **FindVideosNotFiltered.py** (generates missingFiltering.npy)
 
-### 5. Data 
+## Data 
 
 - So far, the data used to develop the current pipeline corresponds to the Google Drive Folder 'Organized_data_JAS'. 
 
@@ -62,7 +63,7 @@ Following is a description of the project structure and data used so far:
 3. **AccelData.xml**
     - Contains the timestamps of the inscopix, accelerometer and camera, as well as the acceleration and gyroscope data (x,y and z)
 
-### 6. DLC project
+## DLC project
 
 Several body parts were tracked using DeepLabCut, namely nose, left hind paw, right hind paw, left front paw, right front paw, tail base and tail tip.
 The project itself can be shared in Google Drive to generate new files from processed videos.
@@ -79,10 +80,10 @@ In development...
 
 ## Missing Implementation
 
-- If you are following **Single_session_analysis.ipynb**, after having all the necessary files generated, organized and properly corrected for missing frames, the next steps in the implementation should be:
-1.  Detecting movement initiations from acceleration and DLC velocity files. A separate module could be made for generating kernel density estimation in the log scale for each file, as well as fitting 2 gaussians...
-2. A separate module could be created to do the psth plots aligned to all a specific event of interest
-3. Separate module for the classifiction of neurons as negatively, positively and non modulated by initiation of movement (abstract to the event)
+- If you are following **Single_session_analysis.ipynb**, after having all the necessary files generated, organised and properly corrected for missing frames, the next steps in the implementation should be:
+1. Detecting movement initiations from acceleration and DLC velocity files. A separate module could be made for generating kernel density estimation in the log scale for each file, as well as performing gaussian fittings.
+2. A separate module could be created to do the psth plots aligned to all a specific event of interest.
+3. Separate module for the classification of neurons as negatively, positively and non modulated by initiation of movement (should be abstract to the event)
 4. Probability density function is not very informative as it is. It should include initiations detected using the accelerometer for every event
 5. Alignment of different types of data (considering the different acquisition rates and the timestamps)
 6. Separate module to build the complete figure with the DLC analysis

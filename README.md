@@ -16,20 +16,6 @@ Following is a description of the project structure and data used:
 ### 2. data_analysis
 
 ### 3. data_structuring
-
-### 4. preprocess_cnmfe_mat2py
-1. **Batch_convertSources2D_simplerFiles.m** (searches for all neuron.mat files and calls **Sources2D_to_simple_mat.m**)
-2. **Sources2D_to_simple_mat.m** (converts these files into a basic .mat file that can be opened in Python using scipy.io.loadmat.)
-3. **Sources2D.m** (matlab class)
-
-- Source2D class doesn't exist in Python. So, to work with this information in Python it is necessary to create new files in which 'neuron', a Sources2D object, is unfolded into matrices that can be manipulated in Python, as lists or numpy arrays. This script performs the described task by searching for the original CNFME mat files in the folder 'Organized_data_JAS' (Google Drive) and generates the desired simpler/readable .mat file in the respective folder for easy access. Keep in mind that for this, you need to have the path of your function 'Sources2D_to_simple_mat.m', as well as 'Sources2D.m' in your MATLAB search path.
-
-### 5. Jupyter notebooks
-- Several preliminary analysis, including a script for single session analysis was developed and reproduced for 4 example sessions (Wt/Bl; Wt/W09; DYTd1/Bl; DYTd1/W09) in 4 different Jupyter Notebooks. These files are being used to generalize the analysis for all subjects.
-- **Single_session_analysis.ipynb** (main script)
-
-### 4. Python files
-
 - Let's start with **DystoniaDataFrame.py**. This file is necessary to generate a pickle/csv file containing all the informationon the available files for all sessions. Generally, if a specific file for one session of one mice exists, the Google Drive file path will be in the respective folder. If the file does not exist, or is stored elsewhere there will be an empty cell. Some other notations are being used, namely -1 whose meaning is explained in the respective module in which such files are being generated. 
 
 - "Organize" modules. There is a set of modules (python files) with the pattern "organizeDF" which have a similar structure. There is a different module for every file I want to create to help the analysis. Each file ultimately serves for creating a simpler data structure with some type of data, namely:
@@ -51,6 +37,17 @@ Following is a description of the project structure and data used:
 1. **FindVideosNotAnalyzed.py** (generates missingDLCanalysis.npy)
 2. **FindVideosNotFiltered.py** (generates missingFiltering.npy)
 
+### 4. preprocess_cnmfe_mat2py
+1. **Batch_convertSources2D_simplerFiles.m** (searches for all neuron.mat files and calls **Sources2D_to_simple_mat.m**)
+2. **Sources2D_to_simple_mat.m** (converts these files into a basic .mat file that can be opened in Python using scipy.io.loadmat.)
+3. **Sources2D.m** (matlab class)
+
+- Source2D class doesn't exist in Python. So, to work with this information in Python it is necessary to create new files in which 'neuron', a Sources2D object, is unfolded into matrices that can be manipulated in Python, as lists or numpy arrays. This script performs the described task by searching for the original CNFME mat files in the folder 'Organized_data_JAS' (Google Drive) and generates the desired simpler/readable .mat file in the respective folder for easy access. Keep in mind that for this, you need to have the path of your function 'Sources2D_to_simple_mat.m', as well as 'Sources2D.m' in your MATLAB search path.
+
+### 5. jupyter_notebooks
+- Several preliminary analysis, including a script for single session analysis was developed and reproduced for 4 example sessions (Wt/Bl; Wt/W09; DYTd1/Bl; DYTd1/W09) in 4 different Jupyter Notebooks. These files are being used to generalize the analysis for all subjects.
+- **Single_session_analysis.ipynb** (main script)
+
 ## Data 
 
 - So far, the data used to develop the current pipeline corresponds to the Google Drive Folder 'Organized_data_JAS'. 
@@ -65,10 +62,17 @@ Following is a description of the project structure and data used:
 
 ## DLC project
 
-Several body parts were tracked using DeepLabCut, namely nose, left hind paw, right hind paw, left front paw, right front paw, tail base and tail tip.
-The project itself can be shared in Google Drive to generate new files from processed videos.
+Tracked body parts using DeepLabCut (should include example image):
+- nose
+- left hind paw (heel and tip)
+- right hind paw (heel and tip)
+- left front paw (heel and tip)
+- right front paw
+- tail (base and tip)
 
-Trainning specifications can be found in the Benchling log book shared with Filipa.
+The DeepLabCut trainned network can be found in  (can be used to generate new files from processed video recordings - should be saved in this repo as well, along with a txt file containing specifications).
+
+Network trainning specifications can be found in the Benchling log book shared with Filipa.
 
 ## Guidelines
 

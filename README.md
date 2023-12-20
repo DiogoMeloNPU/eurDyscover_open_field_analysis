@@ -9,7 +9,7 @@ This project contains all the scripts I've developed so far for organisation and
 
 Following is a description of the project structure and data used:
 
-### 1. venv_dystoniaAnalysis (ignore for know)
+### 1. venv (ignore for know)
 - Virtual environment. Necessary to deal with dependencies.
 - You will need to change **pyvenv.cfg** file according to the path of your python executable.
 

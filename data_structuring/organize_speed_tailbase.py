@@ -7,7 +7,7 @@ import numpy as np
 import dlc2kinematics
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\dystoniaFilesDF_old.pkl"
 dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 
 # create an array to save the paths of the new DLC speed files (tailbase)

@@ -68,9 +68,6 @@ def distanceTravelled(npy_speedPath):
     return distanceTravelledTailbase_m, distanceTravelledTailbaseNormalized_m
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-#dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
-# save the dataframe as a pickle file in google drive
 dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
 dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 

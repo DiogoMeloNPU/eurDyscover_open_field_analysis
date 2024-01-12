@@ -11,9 +11,6 @@ import numpy as np
 import os
 import re
 
-#delete
-#path = r"E:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Organized_data_JAS\D1\Baseline 1\42308_RF_B1\FrameDiff_Centroid2021-04-28T13_45_51.csv"
-
 #create a function that extracts only the frame diff value from the FrameDiff.csv
 def buildFrameDiffDF(frameDiffPath):
     '''
@@ -49,9 +46,12 @@ def buildFrameDiffDF(frameDiffPath):
 
     return df_frameDiff
 
+
 #open the dystoniaFilesDF.pkl that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+#dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 
 #now, let's create a dataframe for each of the FrameDiff files available and store them in Google Drive
 
@@ -84,9 +84,9 @@ print(dystoniaFilesDF)
 
 #save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
 path2saveDF = dystoniaFilesDFpath
-dystoniaFilesDF.to_pickle(path2saveDF)
+dystoniaFilesDF.to_excel(path2saveDF)
 print('\n\nThe dystoniaFilesDF.pkl file was updated.')
 
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
-dystoniaFilesDF.to_csv(DesktopPath)
+#DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
+#dystoniaFilesDF.to_csv(DesktopPath)

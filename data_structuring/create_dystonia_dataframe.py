@@ -1,12 +1,13 @@
-# please note that this code is not resusable for other excel files, this works without alterations specifically for 
-# 'Mice list_Dystonia_WORKING_230922.xlsx' (14-10-2022)
 from os import walk
 import pandas as pd
 import numpy as np
 import os
 
-#dystoniaMiceInfoPath = "J:\O meu disco\EurDyscover\Mice list_Dystonia_WORKING_230922.xlsx"
-dystoniaMiceInfoPath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\Mice list_Dystonia_1123.xlsx"
+'''
+# please note that this code is not resusable for other excel files, this works without alterations specifically for 
+# 'Mice list_Dystonia_WORKING_230922.xlsx' (14-10-2022)
+
+dystoniaMiceInfoPath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Mice list_Dystonia_WORKING_230922.xlsx"
 dystoniaMiceInfoDF = pd.read_excel(dystoniaMiceInfoPath)
 #process the dataframe in order to have a single continous list
 
@@ -28,6 +29,11 @@ dystoniaMiceInfoDF = dystoniaMiceInfoDF.iloc[1: , :] #drop the first row
 dystoniaMiceInfoDF.reset_index(inplace=True)  # reset index
 dystoniaMiceInfoDF = dystoniaMiceInfoDF.iloc[:, 1:] #eliminate first column (incorrect indices)
 dystoniaMiceInfoDF = dystoniaMiceInfoDF.rename_axis('Index', axis = 'columns') #remove the '1' that was 'labeling' the df indices
+'''
+
+path_mice_database = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\__mice_database__.xlsx"
+dystoniaMiceInfoDF = pd.read_excel(path_mice_database); print(dystoniaMiceInfoDF)
+
 
 # dystoniaFilesDF contains detailed information on all mice used
 # it is necessary to create a new df in which each row of dystoniaMiceIndoDF is replicated as much times as the number of sessions
@@ -71,29 +77,29 @@ dystoniaFilesDF['NumberID'] = NumberID
 #filterDystoniaFilesDF = dystoniaFilesDF[(currentSession[0] in dystoniaFilesDF['ID']) & (dystoniaFilesDF['Session'] == currentSession[1])]
 
 '''
-for path, subdirs, files in os.walk(parentFolderDLC):
-    for name in files:
-        if name.endswith('.csv'):
-            # list containing the session (0), the mice id (1) and the path for the DLC coordinates .csv file (2)
-            currentSession = [str(path).split('\\')[-2], str(path).split('\\')[-1][1:], os.path.join(path, name)]
-            #if, in a specific row, there is a match for 'NumberID' (currentSession[0]) and 'Session' (currentSession[1]), 
-            #then the path of the DLC file (currentSession[2]) should be added in that row in the cell from column 'DLC_coordinate_predictions.csv'
-            match = dystoniaFilesDF.loc[(dystoniaFilesDF['Session'] == currentSession[0]) & (
-                dystoniaFilesDF['NumberID'] == currentSession[1])]
-            if len(match) == 1:
-                dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentSession[2]
-                print('The following file path was added to the "DLC_coordinate_predictions" column: {}\n'.format(currentSession[2]))
+#for path, subdirs, files in os.walk(parentFolderDLC):
+#    for name in files:
+#        if name.endswith('.csv'):
+#            # list containing the session (0), the mice id (1) and the path for the DLC coordinates .csv file (2)
+#            currentSession = [str(path).split('\\')[-2], str(path).split('\\')[-1][1:], os.path.join(path, name)]
+#            #if, in a specific row, there is a match for 'NumberID' (currentSession[0]) and 'Session' (currentSession[1]), 
+#            #then the path of the DLC file (currentSession[2]) should be added in that row in the cell from column 'DLC_coordinate_predictions.csv'
+#            match = dystoniaFilesDF.loc[(dystoniaFilesDF['Session'] == currentSession[0]) & (
+#                dystoniaFilesDF['NumberID'] == currentSession[1])]
+#            if len(match) == 1:
+#                dystoniaFilesDF['DLC_coordinate_prediction.csv'][match.index[0]] = currentSession[2]
+#                print('The following file path was added to the "DLC_coordinate_predictions" column: {}\n'.format(currentSession[2]))
 '''
 
 #use the name of lower level subfolders to search for specific files using a file pattern
 
 #use the following path to produce a file list
-parentFolderOtherFiles_D1 = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\D1"
-parentFolderOtherFiles_D2 = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\D2"
+parentFolderOtherFiles_D1 = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\D1"
+parentFolderOtherFiles_D2 = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\D2"
 parentFoldersOtherFiles = np.array([parentFolderOtherFiles_D1, parentFolderOtherFiles_D2])
 
 def build_proper_session_name(str_file_path):
-    proper_session_name = (str(str_file_path).split('\\')[5])
+    proper_session_name = (str(str_file_path).split('\\')[6]) # 5 in the previous version
     if proper_session_name == 'Baseline 1':
         proper_session_name = 'BL1'
     elif proper_session_name == 'Baseline 2':
@@ -107,13 +113,12 @@ for parent in parentFoldersOtherFiles:
             # set the name to lower case characters
             name = name.lower()
             length_path = len(str(path).split('\\'))
-            if length_path == 7: #meaning you are in a lowest level subfolder
+            if length_path == 8: # meaning you are in a lowest level subfolder (7 in the previous version)
                 current_number_id = str(path).split('\\')[-1][:5]
                 current_session = build_proper_session_name(path)
                 current_file_path = os.path.join(path, name)
                 currentFile = [current_number_id, current_session, current_file_path]
                 print(currentFile)
-                # print(currentFile); print('\n')
                 match = dystoniaFilesDF.loc[(dystoniaFilesDF['NumberID'] == currentFile[0]) & (dystoniaFilesDF['Session'] == currentFile[1])]
                 print(len(match))
                 if len(match) == 1:
@@ -152,12 +157,11 @@ for parent in parentFoldersOtherFiles:
 print(dystoniaFilesDF) 
 
 # save the dataframe as a pickle file in google drive
-path2saveDF = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\df_eurDyscover_open_field_analysis_files.pkl"
-
-dystoniaFilesDF.to_pickle(path2saveDF)
+path2saveDF = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDF.to_excel(path2saveDF)
 
 # while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\df_eurDyscover_open_field_analysis_files.xlsx"
+DesktopPath = "C:\\Users\\Administrador\\Desktop\\df_eurDyscover_open_field_analysis_files.xlsx"
 dystoniaFilesDF.to_excel(DesktopPath)
 
 # form here on, this file should not be changed. If you want to improve this file, please perform those changes on a copy (this version is suposed to work only as a database for the file paths for easier and structured access to file paths needed for specific analysis,  which should be implemented in a separate .py module as well)

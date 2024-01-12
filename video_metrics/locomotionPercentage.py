@@ -60,8 +60,8 @@ def locomotionPercentages(npy_speedPath):
     return percentageLocomotionInSession, percentageLocomotionInSession_st_nd, percentageLocomotionInSession_nd_rd, percentageLocomotionInSession_above_rd
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 
 # compute locomotion percentage for all sessions
 
@@ -71,15 +71,15 @@ percentageLocomotionPaths = []
 # create a file pattern for the new files containing the percentages
 file_pattern = 'percentagesLocomotion_'
 
-for row, npy_speedDLC in enumerate(dystoniaFilesDF['npy_speed_DLC.pkl']):
+for row, npy_speedDLC in enumerate(dystoniaFilesDF['npy_speed_DLC.npy']):
     if isinstance(npy_speedDLC, str):
         print(f'\n\n----Processing the following file----: {npy_speedDLC}')
         percent1, percent2, percent3, percent4 = locomotionPercentages(npy_speedDLC)
         percentagesLocomotion = np.array([percent1, percent2, percent3, percent4])
         print(percentagesLocomotion)
         #create the path of the new file
-        beginningPath = 'G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
-        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[2:-1]
+        beginningPath = 'H:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
+        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[3:-1]
         file_type = 'npy'
         temp_path.append(file_pattern + npy_speedDLC.split('\\')[-1][:-3] + file_type)
         path2save_percentages = '\\'.join(temp_path)
@@ -97,9 +97,5 @@ print(dystoniaFilesDF)
 
 #save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
 path2saveDF = dystoniaFilesDFpath
-dystoniaFilesDF.to_pickle(path2saveDF)
-print('\n\nThe dystoniaFilesDF.pkl file was updated.')
-
-#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-DesktopPath = "C:\\Users\\diogo\\OneDrive\\Ambiente de Trabalho\\DystoniaDataBase.csv"
-dystoniaFilesDF.to_csv(DesktopPath)
+dystoniaFilesDF.to_excel(path2saveDF)
+print('\n\nThe file database was updated.')

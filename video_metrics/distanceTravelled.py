@@ -68,8 +68,11 @@ def distanceTravelled(npy_speedPath):
     return distanceTravelledTailbase_m, distanceTravelledTailbaseNormalized_m
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+#dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+# save the dataframe as a pickle file in google drive
+dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 
 # compute distance travelled for all sessions
 
@@ -79,16 +82,17 @@ distanceTravelledPaths = []
 # create a file pattern for the new files containing the percentages
 file_pattern = 'distanceTravelledTailbase_'
 
-for row, npy_speedDLC in enumerate(dystoniaFilesDF['npy_speed_DLC.pkl']):
+for row, npy_speedDLC in enumerate(dystoniaFilesDF['npy_speed_DLC.npy']):
     if isinstance(npy_speedDLC, str):
         print(f'\n\n----Processing the following file----: {npy_speedDLC}')
         distTrav, distTravNorm = distanceTravelled(npy_speedDLC)
         distanceTravelledResults = np.array([distTrav, distTravNorm])
         print(distanceTravelledResults)
         # create the path of the new file
-        beginningPath = 'G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
-        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[2:-1]
+        beginningPath = 'H:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
+        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[3:-1]
         file_type = 'npy'
+        print(npy_speedDLC.split('\\')[-1][:-3])
         temp_path.append(file_pattern + npy_speedDLC.split('\\')[-1][:-3] + file_type)
         path2save_distances = '\\'.join(temp_path)
         np.save(path2save_distances, distanceTravelledResults)
@@ -105,9 +109,5 @@ print(dystoniaFilesDF)
 
 #save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
 path2saveDF = dystoniaFilesDFpath
-dystoniaFilesDF.to_pickle(path2saveDF)
-print('\n\nThe dystoniaFilesDF.pkl file was updated.')
-
-#while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
-#DesktopPath = "C:\\Users\\diogo\\OneDrive\\Ambiente de Trabalho\\DystoniaDataBase.csv"
-#dystoniaFilesDF.to_csv(DesktopPath)
+dystoniaFilesDF.to_excel(path2saveDF)
+print('\n\nThe file database was updated.')

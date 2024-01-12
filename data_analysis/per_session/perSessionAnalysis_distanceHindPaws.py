@@ -60,8 +60,10 @@ def ratioDigitalTipsHeels(path_h5_DLC, npy_speedPath):
     return npy_ratio_distances, mean_ratio_digitalTips_heels
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+#dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+dystoniaFilesDFpath = r"C:\Users\Administrador\Desktop\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 
 # compute locomotion percentage for all sessions
 
@@ -72,7 +74,7 @@ ratio_hindPaws_paths = []
 file_pattern = 'ratio_hindPaws_'
 
 # corrected subfolders for DLC.h5 files
-corrected_DLC_path = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\"
+corrected_DLC_path = "H:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\"
 
 for row, (npy_speedDLC, DLC_h5_file) in enumerate(zip(dystoniaFilesDF['npy_speed_DLC.pkl'], dystoniaFilesDF['DLC_coordinate_prediction.h5'])):
     if isinstance(npy_speedDLC, str) and isinstance(DLC_h5_file, str):
@@ -82,7 +84,7 @@ for row, (npy_speedDLC, DLC_h5_file) in enumerate(zip(dystoniaFilesDF['npy_speed
         npy_ratio_distances, mean_ratio_digitalTips_heels = ratioDigitalTipsHeels(DLC_h5_file, npy_speedDLC)
         print(npy_ratio_distances)
         # create the path of the new file
-        beginningPath = 'G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
+        beginningPath = 'H:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
         temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[2:-1]
         file_type = 'npy'
         temp_path.append(file_pattern + npy_speedDLC.split('\\')[-1][:-3] + file_type)
@@ -101,5 +103,7 @@ print(dystoniaFilesDF)
 
 #save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
 path2saveDF = dystoniaFilesDFpath
-dystoniaFilesDF.to_pickle(path2saveDF)
-print('\n\nThe dystoniaFilesDF.pkl file was updated.')
+#dystoniaFilesDF.to_pickle(path2saveDF)
+#print('\n\nThe dystoniaFilesDF.pkl file was updated.')
+
+dystoniaFilesDF.to_excel(path2saveDF)

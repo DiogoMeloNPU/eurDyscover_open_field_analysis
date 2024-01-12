@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import os
 #import the module necessary for obtaining the camera timestamps
-from data_structuring.organize_accel_data_timestamps import open_AccelData_asDF, get_camera_timestamps
+from organize_accel_data_timestamps import open_AccelData_asDF, get_camera_timestamps
 
 def buildDLCpredictionsDF(path_predictions_DLC, path_acceldata, framediff_path):
     '''
@@ -71,8 +71,11 @@ def buildDLCpredictionsDF(path_predictions_DLC, path_acceldata, framediff_path):
     return df_DLC #dataframe with the DLC predictions
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+#dystoniaFilesDFpath = "J:\\O meu disco\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
+#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
+# save the dataframe as a pickle file in google drive
+dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 
 #create an array to save the paths of the new OrganizedDLC files
 OrganizedDLCpaths = []
@@ -107,6 +110,7 @@ dystoniaFilesDF['OrganizedDLC_coordinate_predictions.pkl'] = OrganizedDLCpaths
 #show the df
 print(dystoniaFilesDF)
 
+'''
 #save the dataframe as a pickle file in google drive - this will overwrite the fist dystoniaFilesDF.csv
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_pickle(path2saveDF)
@@ -115,3 +119,6 @@ print('\n\nThe dystoniaFileDF.pkl file was updated.')
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
 DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
 dystoniaFilesDF.to_csv(DesktopPath)
+'''
+
+dystoniaFilesDF.to_excel(dystoniaFilesDFpath)

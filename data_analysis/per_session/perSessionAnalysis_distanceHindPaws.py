@@ -1,3 +1,5 @@
+# THIS FILE NEEDS TO BE RENAMED
+
 # this file contains the necessary functions to compute a metric of paw opening
 # ratio between the distance between the digital tips of the left and right hind paws and the...
 # distance between the heels of the left and right hind paws 
@@ -60,9 +62,7 @@ def ratioDigitalTipsHeels(path_h5_DLC, npy_speedPath):
     return npy_ratio_distances, mean_ratio_digitalTips_heels
 
 #open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-#dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
-dystoniaFilesDFpath = r"C:\Users\Administrador\Desktop\df_eurDyscover_open_field_analysis_files.xlsx"
+dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
 dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 
 # compute locomotion percentage for all sessions
@@ -76,16 +76,16 @@ file_pattern = 'ratio_hindPaws_'
 # corrected subfolders for DLC.h5 files
 corrected_DLC_path = "H:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\"
 
-for row, (npy_speedDLC, DLC_h5_file) in enumerate(zip(dystoniaFilesDF['npy_speed_DLC.pkl'], dystoniaFilesDF['DLC_coordinate_prediction.h5'])):
+for row, (npy_speedDLC, DLC_h5_file) in enumerate(zip(dystoniaFilesDF['npy_speed_DLC.npy'], dystoniaFilesDF['DLC_coordinate_prediction.h5'])):
     if isinstance(npy_speedDLC, str) and isinstance(DLC_h5_file, str):
         # correct path of DLC.h5 files
-        DLC_h5_file = corrected_DLC_path + '\\'.join(DLC_h5_file.split('\\')[2:]); print(DLC_h5_file)
+        DLC_h5_file = corrected_DLC_path + '\\'.join(DLC_h5_file.split('\\')[3:]); print(DLC_h5_file)
         # print(f'\n\n----Processing the following files----: {npy_speedDLC} and {DLC_h5_file}')
         npy_ratio_distances, mean_ratio_digitalTips_heels = ratioDigitalTipsHeels(DLC_h5_file, npy_speedDLC)
         print(npy_ratio_distances)
         # create the path of the new file
         beginningPath = 'H:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\'
-        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[2:-1]
+        temp_path = beginningPath.split('\\') + dystoniaFilesDF['neuron.mat'].iloc[row].split('\\')[3:-1]
         file_type = 'npy'
         temp_path.append(file_pattern + npy_speedDLC.split('\\')[-1][:-3] + file_type)
         path2save_results = '\\'.join(temp_path)
@@ -103,7 +103,5 @@ print(dystoniaFilesDF)
 
 #save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
 path2saveDF = dystoniaFilesDFpath
-#dystoniaFilesDF.to_pickle(path2saveDF)
-#print('\n\nThe dystoniaFilesDF.pkl file was updated.')
-
 dystoniaFilesDF.to_excel(path2saveDF)
+print('\n\nThe file database was updated.')

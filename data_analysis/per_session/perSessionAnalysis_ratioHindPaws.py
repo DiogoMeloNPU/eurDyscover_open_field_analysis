@@ -1,3 +1,5 @@
+# THIS FILE NEEDS TO BE RENAMED
+
 # import necessary packages
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,8 +7,6 @@ import seaborn as sns
 import pandas as pd
 
 # open the dystoniaFilesDF.csv that was created in DystoniaDataFrame.py
-#dystoniaFilesDFpath = "G:\\.shortcut-targets-by-id\\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\\EurDyscover\\Dystonia_Data\\dystoniaFilesDF.pkl"
-#dystoniaFilesDF = pd.read_pickle(dystoniaFilesDFpath)
 dystoniaFilesDFpath = r"H:\.shortcut-targets-by-id\1MH0egFqTqTToPE-wxCs7mDWL48lVKqDB\EurDyscover\Dystonia_Data\df_eurDyscover_open_field_analysis_files.xlsx"
 dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 

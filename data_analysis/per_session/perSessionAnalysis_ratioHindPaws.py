@@ -13,7 +13,7 @@ dystoniaFilesDF = pd.read_excel(dystoniaFilesDFpath)
 # define groups for analysis
 surgeries = ['SNL', 'Sham']
 genotypes = ['DYT1', 'WT']
-sessions = ['BL1', 'W3', 'W9']
+sessions = ['BL1', 'W1', 'W3', 'W6', 'W9']
 
 groups = np.array(np.meshgrid(surgeries, genotypes, sessions)).T.reshape(-1, 3)
 

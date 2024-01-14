@@ -85,7 +85,7 @@ print(dystoniaFilesDF)
 #save the df as a pkl file in google drive - this will overwrite (update) dystoniaFilesDF.pkl
 path2saveDF = dystoniaFilesDFpath
 dystoniaFilesDF.to_excel(path2saveDF)
-print('\n\nThe dystoniaFilesDF.pkl file was updated.')
+print('\n\nThe file database was updated.')
 
 #while dystoniaFilesDF is incomplete, just save it to the Desktop to check if is is being created correctly
 #DesktopPath = "C:\\Users\\Admin\\Desktop\\CheckDystoniaDF\\DystoniaDataBase.csv"
